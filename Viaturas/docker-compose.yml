@@ -18,6 +18,12 @@ services:
       - db
     networks:
       - backend-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frotapm.rule=Host(`http://ygw0g4k0kwk84k8o8owsoskw.195.200.6.231.sslip.io`)"
+      - "traefik.http.routers.frotapm.entrypoints=websecure"
+      - "traefik.http.routers.frotapm.tls=true"
+      - "traefik.http.services.frotapm.loadbalancer.server.port=8080"
 
   db:
     container_name: frotapm-postgres
