@@ -9,6 +9,10 @@ public class ViaturaDTO {
     @NotBlank(message = "A placa não pode estar vazia.")
     private String placa;
 
+    @NotBlank(message = "O modelo não pode estar vazio.")
+    private String modelo;
+
+
     @NotBlank(message = "O prefixo é obrigatório.")
     private String prefixo;
 
@@ -20,7 +24,6 @@ public class ViaturaDTO {
     @Min(value = 0, message = "KM de revisão não pode ser negativo.")
     private Integer kmRevisao;
 
-    // Getters e Setters
     public String getPlaca() {
         return placa;
     }
@@ -39,6 +42,14 @@ public class ViaturaDTO {
 
     public Integer getKmAtual() {
         return kmAtual;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
     }
 
     public void setKmAtual(Integer kmAtual) {
