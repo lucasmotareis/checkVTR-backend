@@ -13,10 +13,13 @@ public class Viatura {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String modelo;
     private String placa;
     private String prefixo;
     private int km_atual;
     private int km_revisao;
+
+
 
     @OneToMany(mappedBy = "viatura", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -26,15 +29,23 @@ public class Viatura {
     public Viatura() {
     }
 
-    public Viatura(Long id, String placa, int km_atual, String prefixo, int km_revisao) {
-        this.id = id;
-        this.placa = placa;
+    public Viatura(List<CheckList> checklists, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
+        this.checklists = checklists;
+        this.km_revisao = km_revisao;
         this.km_atual = km_atual;
         this.prefixo = prefixo;
-        this.km_revisao = km_revisao;
+        this.placa = placa;
+        this.modelo = modelo;
+        this.id = id;
     }
 
+    public String getModelo() {
+        return modelo;
+    }
 
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
 
     public Long getId() {
         return id;
