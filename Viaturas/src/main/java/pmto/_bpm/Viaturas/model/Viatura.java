@@ -1,17 +1,27 @@
 package pmto._bpm.Viaturas.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="Viatura")
 public class Viatura {
+
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String placa;
     private String prefixo;
     private int km_atual;
     private int km_revisao;
+
+    @OneToMany(mappedBy = "viatura", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CheckList> checklists = new ArrayList<>();
+
 
     public Viatura() {
     }
@@ -64,5 +74,13 @@ public class Viatura {
 
     public void setKm_revisao(int km_revisao) {
         this.km_revisao = km_revisao;
+    }
+
+    public List<CheckList> getChecklists() {
+        return checklists;
+    }
+
+    public void setChecklists(List<CheckList> checklists) {
+        this.checklists = checklists;
     }
 }

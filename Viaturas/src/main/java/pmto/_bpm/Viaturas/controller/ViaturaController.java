@@ -1,6 +1,8 @@
 package pmto._bpm.Viaturas.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
+import pmto._bpm.Viaturas.dto.ViaturaDTO;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.Viaturas.model.Viatura;
 import pmto._bpm.Viaturas.service.ViaturaService;
@@ -20,21 +22,31 @@ public class ViaturaController {
     @GetMapping
     public List<Viatura> getAllViaturas() {
         return viaturaService.getAll();
+    }
 
+    @GetMapping("/{id}")
+    public Viatura getViaturaById(@PathVariable Long id){
+        return viaturaService.getViaturaById(id);
     }
 
     @PostMapping
-    public Viatura createViatura(@RequestBody Viatura viatura){
-        return viaturaService.save(viatura);
+    public ResponseEntity<Viatura> createViatura(@RequestBody @Valid ViaturaDTO dto) {
+        Viatura nova = viaturaService.save(dto);
+        return ResponseEntity.ok(nova);
     }
 
-    @DeleteMapping
-    public void deleteViaturaById(@RequestBody Long id_viatura){
-        viaturaService.delete(id_viatura);
+    @PutMapping("/{id}")
+    public ResponseEntity<Viatura> atualizarViatura(
+            @PathVariable Long id,
+            @RequestBody @Valid ViaturaDTO dto
+    ) {
+        Viatura atualizada = viaturaService.atualizar(id, dto);
+        return ResponseEntity.ok(atualizada);
     }
 
-
-
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteViatura(@PathVariable Long id) {
+        viaturaService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
