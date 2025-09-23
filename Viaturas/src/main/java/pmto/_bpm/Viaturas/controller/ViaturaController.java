@@ -10,7 +10,6 @@ import pmto._bpm.Viaturas.service.ViaturaService;
 import java.util.List;
 
 @RestController
-@RequestMapping("viatura")
 public class ViaturaController {
 
     private final ViaturaService viaturaService;
@@ -19,23 +18,23 @@ public class ViaturaController {
         this.viaturaService = viaturaService;
     }
 
-    @GetMapping
+    @GetMapping("/viaturas")
     public List<Viatura> getAllViaturas() {
         return viaturaService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("viatura/{id}")
     public Viatura getViaturaById(@PathVariable Long id){
         return viaturaService.getViaturaById(id);
     }
 
-    @PostMapping
+    @PostMapping("/viatura")
     public ResponseEntity<Viatura> createViatura(@RequestBody @Valid ViaturaDTO dto) {
         Viatura nova = viaturaService.save(dto);
         return ResponseEntity.ok(nova);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("viatura/{id}")
     public ResponseEntity<Viatura> atualizarViatura(
             @PathVariable Long id,
             @RequestBody @Valid ViaturaDTO dto
@@ -44,7 +43,7 @@ public class ViaturaController {
         return ResponseEntity.ok(atualizada);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("viatura/{id}")
     public ResponseEntity<Void> deleteViatura(@PathVariable Long id) {
         viaturaService.delete(id);
         return ResponseEntity.noContent().build();
