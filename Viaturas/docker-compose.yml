@@ -20,7 +20,7 @@ services:
       - backend-net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frotapm.rule=Host(`pmto8bpm.com.br`)"
+      - "traefik.http.routers.frotapm.rule=Host(`api.pmto8bpm.com.br`)"
       - "traefik.http.routers.frotapm.entrypoints=websecure"
       - "traefik.http.routers.frotapm.tls=true"
       - "traefik.http.routers.frotapm.tls.certresolver=letsencrypt"
