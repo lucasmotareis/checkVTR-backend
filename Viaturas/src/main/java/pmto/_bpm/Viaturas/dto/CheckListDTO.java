@@ -38,14 +38,9 @@ public class CheckListDTO {
         return this.viaturaId;
     }
 
-    public void setViaturaId(Long viaturaId) {
-        this.viaturaId = viaturaId;
-    }
-
     public List<ItemCheckListDTO> getItens() {
         return this.itens;
     }
-
     public void setItens(List<ItemCheckListDTO> itens) {
         this.itens = itens;
     }

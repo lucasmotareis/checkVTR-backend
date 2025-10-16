@@ -35,7 +35,7 @@ public class CheckListService {
         if (dto.getKmAtual() != null && dto.getKmAtual() > 0) {
             checkList.setKmAtual(dto.getKmAtual());
             viatura.setKm_atual(dto.getKmAtual());
-            viaturaRepository.save(viatura); // ← importante!
+            viaturaRepository.save(viatura);
         }
 
 
@@ -43,13 +43,13 @@ public class CheckListService {
         List<ItemCheckList> itens = new ArrayList<>();
         for (ItemCheckListDTO itemDTO : dto.getItens()) {
             ItemCheckList item = new ItemCheckList();
-            item.setChecklist(checkList); // ← importante!
+            item.setChecklist(checkList);
             item.setItem(itemDTO.getItem());
             item.setTipoProblema(itemDTO.getTipoProblema());
             item.setObservacao(itemDTO.getObservacao());
             itens.add(item);
         }
-        checkList.setItens(itens); // ← SETAR ANTES DE SALVAR
+        checkList.setItens(itens);
 
 
         return checkListRepository.save(checkList);
