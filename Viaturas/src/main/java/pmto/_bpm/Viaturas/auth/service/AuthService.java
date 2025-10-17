@@ -2,11 +2,11 @@ package pmto._bpm.Viaturas.auth.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pmto._bpm.Viaturas.auth.dto.AuthResponse;
 import pmto._bpm.Viaturas.auth.dto.LoginRequest;
 import pmto._bpm.Viaturas.auth.dto.RegisterRequest;
 import pmto._bpm.Viaturas.auth.model.Role;
 import pmto._bpm.Viaturas.auth.model.User;
-import pmto._bpm.Viaturas.auth.model.CadastroAutorizado;
 import pmto._bpm.Viaturas.auth.repository.CadastroAutorizadoRepository;
 import pmto._bpm.Viaturas.auth.repository.UserRepository;
 
@@ -43,7 +43,7 @@ public class AuthService {
 
         User user = new User();
         user.setMatricula( dto.getMatricula() );
-        user.setCpf(dto.getCpf() );
+        user.setCPF(dto.getCpf() );
         user.setSenha(passwordEncoder.encode(dto.getSenha()));
         user.setNome_guerra( dto.getNome_guerra() );
         user.setRole(Role.valueOf("MOTORISTA"));
@@ -53,14 +53,16 @@ public class AuthService {
 
     }
 
-    public String login(LoginRequest dto) {
+    public AuthResponse login(LoginRequest dto) {
         User user = userRepository.findByMatricula(dto.getMatricula())
                 .orElseThrow(()-> new IllegalArgumentException("Usuário não encontrado."));
 
         if (!passwordEncoder.matches(dto.getSenha(), user.getSenha())) {
             throw new IllegalArgumentException("Senha inválida.");
         }
-        return jwtService.generateToken(user);
+        String token = jwtService.generateToken(user);
+
+        return new AuthResponse(token, user.getNome_guerra(), user.getMatricula(), user.getRole().name());
 
     }
 

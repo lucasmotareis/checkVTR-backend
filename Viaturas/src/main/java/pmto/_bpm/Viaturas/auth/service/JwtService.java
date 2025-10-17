@@ -1,6 +1,7 @@
 package pmto._bpm.Viaturas.auth.service;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.Value;
 import pmto._bpm.Viaturas.auth.model.User;
 
 
@@ -13,7 +14,10 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private final String SECRET_KEY = "secreto_para_gerar_token"; // use algo seguro e externo!
+
+
+    private final String SECRET_KEY = "0p9S*dT9!sC#7Y2eXvP@1qL8Zk^mA5Gt";
+
 
     public String generateToken(User user) {
         return Jwts.builder()

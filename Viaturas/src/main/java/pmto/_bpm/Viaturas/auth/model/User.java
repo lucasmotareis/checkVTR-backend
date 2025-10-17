@@ -21,7 +21,7 @@ public class User implements UserDetails {
     private String senha;
 
     @Column(unique = true)
-    private String cpf;
+    private String CPF;
 
     @Column(unique = true)
     private String matricula;
@@ -32,11 +32,11 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String nome_guerra, String senha, String cpf, String matricula, Role role) {
+    public User(String nome_guerra, String senha, String CPF, String matricula, Role role) {
 
         this.nome_guerra = nome_guerra;
         this.senha = senha;
-        this.cpf = cpf;
+        this.CPF = CPF;
         this.matricula = matricula;
         this.role = role;
     }
@@ -59,12 +59,12 @@ public class User implements UserDetails {
         this.senha = senha;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getCPF() {
+        return CPF;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCPF(String CPF) {
+        this.CPF = CPF;
     }
 
     public String getMatricula() {
