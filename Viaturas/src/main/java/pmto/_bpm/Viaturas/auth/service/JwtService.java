@@ -2,6 +2,7 @@ package pmto._bpm.Viaturas.auth.service;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.Value;
+import pmto._bpm.Viaturas.auth.config.JwtProperties;
 import pmto._bpm.Viaturas.auth.model.User;
 
 
@@ -15,8 +16,16 @@ import java.util.Date;
 @Service
 public class JwtService {
 
+    private final JwtProperties jwtProperties;
 
-    private final String SECRET_KEY = "0p9S*dT9!sC#7Y2eXvP@1qL8Zk^mA5Gt";
+    public JwtService(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
+    }
+
+    private Key getSignKey() {
+        byte[] keyBytes = jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
 
     public String generateToken(User user) {
@@ -29,10 +38,7 @@ public class JwtService {
                 .compact();
     }
 
-    private Key getSignKey() {
-        byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
+
 
     public String extractUsername(String token) {
         return Jwts.parserBuilder()
