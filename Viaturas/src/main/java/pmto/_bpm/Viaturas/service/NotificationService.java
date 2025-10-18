@@ -1,8 +1,11 @@
 package pmto._bpm.Viaturas.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pmto._bpm.Viaturas.model.Batalhao;
 import pmto._bpm.Viaturas.model.Notification;
 import pmto._bpm.Viaturas.dto.NotificationDTO;
+import pmto._bpm.Viaturas.repository.BatalhaoRepository;
 import pmto._bpm.Viaturas.repository.NotificationRepository;
 
 import java.util.List;
@@ -10,15 +13,20 @@ import java.util.List;
 @Service
 public class NotificationService {
     private final NotificationRepository notificationRepository;
+    @Autowired
+    private BatalhaoRepository batalhaoRepository;
 
     public NotificationService(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
     }
 
     public Notification criar(NotificationDTO dto) {
+        Batalhao batalhao = batalhaoRepository.findById(dto.getBatalhaoId())
+                .orElseThrow(() -> new IllegalArgumentException("Batalhão não encontrado"));
         Notification notification = new Notification();
         notification.setTitulo(dto.getTitulo());
         notification.setDescricao(dto.getDescricao());
+        notification.setBatalhao(batalhao);
         return notificationRepository.save(notification);
     }
 

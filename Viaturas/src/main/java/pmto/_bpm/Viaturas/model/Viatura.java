@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="Viatura")
+@Table(name="viatura")
 public class Viatura {
 
     @Id
@@ -19,7 +19,9 @@ public class Viatura {
     private int km_atual;
     private int km_revisao;
 
-
+    @ManyToOne
+    @JoinColumn(name = "batalhao_id")
+    private Batalhao batalhao;
 
     @OneToMany(mappedBy = "viatura", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -29,7 +31,7 @@ public class Viatura {
     public Viatura() {
     }
 
-    public Viatura(List<CheckList> checklists, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
+    public Viatura(Batalhao batalhao, List<CheckList> checklists, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
         this.checklists = checklists;
         this.km_revisao = km_revisao;
         this.km_atual = km_atual;
@@ -37,6 +39,15 @@ public class Viatura {
         this.placa = placa;
         this.modelo = modelo;
         this.id = id;
+        this.batalhao = batalhao;
+    }
+
+    public Batalhao getBatalhao() {
+        return batalhao;
+    }
+
+    public void setBatalhao(Batalhao batalhao) {
+        this.batalhao = batalhao;
     }
 
     public String getModelo() {

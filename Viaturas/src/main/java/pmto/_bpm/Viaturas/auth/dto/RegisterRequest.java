@@ -1,6 +1,7 @@
 package pmto._bpm.Viaturas.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 public class RegisterRequest {
@@ -17,6 +18,17 @@ public class RegisterRequest {
     @NotBlank
     private String matricula;
 
+
+    @NotNull
+    private Long batalhaoId;
+
+    public Long getBatalhaoId() {
+        return batalhaoId;
+    }
+
+    public void setBatalhaoId(Long batalhaoId) {
+        this.batalhaoId = batalhaoId;
+    }
 
     public String getNome_guerra() {
         return nome_guerra;

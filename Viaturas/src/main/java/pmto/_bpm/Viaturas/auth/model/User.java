@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pmto._bpm.Viaturas.model.Batalhao;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +18,9 @@ public class User implements UserDetails {
 
     private String nome_guerra;
 
+    @ManyToOne
+    @JoinColumn(name = "batalhao_id")
+    private Batalhao batalhao;
 
     private String senha;
 
@@ -32,16 +36,26 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String nome_guerra, String senha, String CPF, String matricula, Role role) {
-
+    public User(Batalhao batalhao, String nome_guerra, String senha, String CPF, String matricula, Role role) {
         this.nome_guerra = nome_guerra;
         this.senha = senha;
         this.CPF = CPF;
         this.matricula = matricula;
         this.role = role;
+        this.batalhao = batalhao;
     }
 
+    public Batalhao getBatalhao() {
+        return batalhao;
+    }
 
+    public void setBatalhao(Batalhao batalhao) {
+        this.batalhao = batalhao;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public String getNome_guerra() {
         return nome_guerra;
