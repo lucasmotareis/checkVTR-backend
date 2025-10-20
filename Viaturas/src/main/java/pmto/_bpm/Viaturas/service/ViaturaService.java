@@ -1,9 +1,12 @@
 package pmto._bpm.Viaturas.service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import pmto._bpm.Viaturas.dto.ViaturaDTO;
 
 import org.springframework.stereotype.Service;
+import pmto._bpm.Viaturas.model.Batalhao;
 import pmto._bpm.Viaturas.model.Viatura;
+import pmto._bpm.Viaturas.repository.BatalhaoRepository;
 import pmto._bpm.Viaturas.repository.ViaturaRepository;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -12,27 +15,29 @@ import java.util.List;
 
 @Service
 public class ViaturaService {
+    @Autowired
+    private BatalhaoRepository batalhaoRepository;
+
     public final ViaturaRepository viaturaRepository;
 
     public ViaturaService(ViaturaRepository viaturaRepository) {
         this.viaturaRepository = viaturaRepository;
     }
 
-    public List<Viatura> getAll() {
-        return viaturaRepository.findAll();
-    }
-
-    public Viatura getViaturaById(@PathVariable Long id){
-        return viaturaRepository.findById(id).get();
-    }
 
     public Viatura save(ViaturaDTO dto) {
+
+        Batalhao batalhao = batalhaoRepository.findById(dto.getBatalhaoId())
+                .orElseThrow(() -> new IllegalArgumentException("Batalhão não encontrado"));
+
         Viatura viatura = new Viatura();
         viatura.setPlaca(dto.getPlaca());
         viatura.setPrefixo(dto.getPrefixo());
         viatura.setModelo(dto.getModelo());
+        viatura.setManutencao(dto.isManutencao());
         viatura.setKm_atual(dto.getKmAtual());
         viatura.setKm_revisao(dto.getKmRevisao());
+        viatura.setBatalhao(batalhao);
         return viaturaRepository.save(viatura);
     }
 
@@ -52,11 +57,19 @@ public class ViaturaService {
         existente.setPlaca(dto.getPlaca());
         existente.setPrefixo(dto.getPrefixo());
         existente.setKm_atual(dto.getKmAtual());
+        existente.setManutencao(dto.isManutencao());
         existente.setModelo(dto.getModelo());
         existente.setKm_revisao(dto.getKmRevisao());
 
         return viaturaRepository.save(existente);
     }
 
+    public List<Viatura> getByBatalhao(Long batalhaoId) {
+        return viaturaRepository.findByBatalhaoId(batalhaoId);
+    }
+
+    public Viatura getViaturaById(Long id) {
+        return viaturaRepository.getById(id);
+    }
 
 }
