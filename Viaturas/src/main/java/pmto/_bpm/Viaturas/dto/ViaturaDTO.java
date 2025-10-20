@@ -12,6 +12,8 @@ public class ViaturaDTO {
     @NotBlank(message = "O modelo não pode estar vazio.")
     private String modelo;
 
+    private boolean manutencao;
+
     private Long batalhaoId;
 
     @NotBlank(message = "O prefixo é obrigatório.")
@@ -31,6 +33,14 @@ public class ViaturaDTO {
 
     public void setBatalhaoId(Long batalhaoId) {
         this.batalhaoId = batalhaoId;
+    }
+
+    public boolean isManutencao() {
+        return manutencao;
+    }
+
+    public void setManutencao(boolean manutencao) {
+        this.manutencao = manutencao;
     }
 
     public String getPlaca() {

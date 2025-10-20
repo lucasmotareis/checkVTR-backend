@@ -18,6 +18,7 @@ public class Viatura {
     private String prefixo;
     private int km_atual;
     private int km_revisao;
+    private boolean manutencao;
 
     @ManyToOne
     @JoinColumn(name = "batalhao_id")
@@ -31,7 +32,7 @@ public class Viatura {
     public Viatura() {
     }
 
-    public Viatura(Batalhao batalhao, List<CheckList> checklists, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
+    public Viatura(Batalhao batalhao,Boolean manutencao, List<CheckList> checklists, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
         this.checklists = checklists;
         this.km_revisao = km_revisao;
         this.km_atual = km_atual;
@@ -40,6 +41,7 @@ public class Viatura {
         this.modelo = modelo;
         this.id = id;
         this.batalhao = batalhao;
+        this.manutencao = manutencao;
     }
 
     public Batalhao getBatalhao() {
@@ -100,6 +102,14 @@ public class Viatura {
 
     public List<CheckList> getChecklists() {
         return checklists;
+    }
+
+    public boolean isManutencao() {
+        return manutencao;
+    }
+
+    public void setManutencao(boolean manutencao) {
+        this.manutencao = manutencao;
     }
 
     public void setChecklists(List<CheckList> checklists) {

@@ -34,6 +34,7 @@ public class ViaturaService {
         viatura.setPlaca(dto.getPlaca());
         viatura.setPrefixo(dto.getPrefixo());
         viatura.setModelo(dto.getModelo());
+        viatura.setManutencao(dto.isManutencao());
         viatura.setKm_atual(dto.getKmAtual());
         viatura.setKm_revisao(dto.getKmRevisao());
         viatura.setBatalhao(batalhao);
@@ -56,6 +57,7 @@ public class ViaturaService {
         existente.setPlaca(dto.getPlaca());
         existente.setPrefixo(dto.getPrefixo());
         existente.setKm_atual(dto.getKmAtual());
+        existente.setManutencao(dto.isManutencao());
         existente.setModelo(dto.getModelo());
         existente.setKm_revisao(dto.getKmRevisao());
 
