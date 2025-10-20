@@ -7,6 +7,8 @@ import pmto._bpm.Viaturas.dto.CheckListDTO;
 import pmto._bpm.Viaturas.model.CheckList;
 import pmto._bpm.Viaturas.service.CheckListService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/checklist")
 public class CheckListController {
@@ -28,5 +30,10 @@ public class CheckListController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro ao criar checklist: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/viaturas/{id}/checklists")
+    public List<CheckList> getChecklistsByViatura(@PathVariable Long id) {
+        return checkListService.findByViaturaId(id);
     }
 }

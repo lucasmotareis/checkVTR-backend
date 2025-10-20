@@ -31,14 +31,11 @@ public class CheckListService {
         checkList.setViatura(viatura);
         checkList.setImagens(dto.getImagens());
 
-
         if (dto.getKmAtual() != null && dto.getKmAtual() > 0) {
             checkList.setKmAtual(dto.getKmAtual());
             viatura.setKm_atual(dto.getKmAtual());
             viaturaRepository.save(viatura);
         }
-
-
 
         List<ItemCheckList> itens = new ArrayList<>();
         for (ItemCheckListDTO itemDTO : dto.getItens()) {
@@ -54,4 +51,9 @@ public class CheckListService {
 
         return checkListRepository.save(checkList);
     }
+
+    public List<CheckList> findByViaturaId(Long id) {
+        return checkListRepository.findByViaturaId(id);
+    }
+
 }

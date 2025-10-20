@@ -24,16 +24,12 @@ public class Viatura {
     @JoinColumn(name = "batalhao_id")
     private Batalhao batalhao;
 
-    @OneToMany(mappedBy = "viatura", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<CheckList> checklists = new ArrayList<>();
 
 
     public Viatura() {
     }
 
-    public Viatura(Batalhao batalhao,Boolean manutencao, List<CheckList> checklists, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
-        this.checklists = checklists;
+    public Viatura(Batalhao batalhao,Boolean manutencao, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
         this.km_revisao = km_revisao;
         this.km_atual = km_atual;
         this.prefixo = prefixo;
@@ -100,9 +96,6 @@ public class Viatura {
         this.km_revisao = km_revisao;
     }
 
-    public List<CheckList> getChecklists() {
-        return checklists;
-    }
 
     public boolean isManutencao() {
         return manutencao;
@@ -112,7 +105,5 @@ public class Viatura {
         this.manutencao = manutencao;
     }
 
-    public void setChecklists(List<CheckList> checklists) {
-        this.checklists = checklists;
-    }
+
 }
