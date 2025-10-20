@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import pmto._bpm.Viaturas.model.Batalhao;
 import pmto._bpm.Viaturas.model.Notification;
 import pmto._bpm.Viaturas.dto.NotificationDTO;
+import pmto._bpm.Viaturas.model.Viatura;
 import pmto._bpm.Viaturas.repository.BatalhaoRepository;
 import pmto._bpm.Viaturas.repository.NotificationRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationService {
@@ -30,9 +32,6 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
 
-    public List<Notification> findAll() {
-        return notificationRepository.findAll();
-    }
 
     public void deletar(Long id) {
         if (notificationRepository.existsById(id)) {
@@ -48,6 +47,14 @@ public class NotificationService {
         existente.setTitulo(dto.getTitulo());
         existente.setDescricao(dto.getDescricao());
         return notificationRepository.save(existente);
+    }
+
+    public List<Notification> getByBatalhao(Long batalhaoId) {
+        return notificationRepository.findByBatalhaoId(batalhaoId);
+    }
+
+    public Notification getNotificationById(Long id) {
+        return notificationRepository.getById(id);
     }
 
 }

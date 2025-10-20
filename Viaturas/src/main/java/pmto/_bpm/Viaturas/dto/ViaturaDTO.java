@@ -12,7 +12,6 @@ public class ViaturaDTO {
     @NotBlank(message = "O modelo não pode estar vazio.")
     private String modelo;
 
-    @NotBlank(message = "O Batalhão não pode estar vazio.")
     private Long batalhaoId;
 
     @NotBlank(message = "O prefixo é obrigatório.")

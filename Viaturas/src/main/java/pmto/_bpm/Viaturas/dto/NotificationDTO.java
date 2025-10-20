@@ -10,7 +10,6 @@ public class NotificationDTO {
     @NotBlank(message = "A descrição é obrigatória.")
     private String descricao;
 
-    @NotBlank(message = "O Batalhão não pode estar vazio.")
     private Long batalhaoId;
     // Construtor padrão
     public NotificationDTO() {
