@@ -16,8 +16,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: 123456
     depends_on:
       - db
-    networks:
-      - backend-net
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frotapm.rule=Host(`api.pmto8bpm.com.br`)"
@@ -39,11 +37,6 @@ services:
       POSTGRES_PASSWORD: 123456
     volumes:
       - pgdata:/var/lib/postgresql/data
-    networks:
-      - backend-net
 
 volumes:
   pgdata:
-
-networks:
-  backend-net:
