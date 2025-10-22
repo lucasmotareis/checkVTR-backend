@@ -6,9 +6,9 @@ public class AuthResponse {
 
 
     private String token;
-    User user;
+    UserResponse user;
 
-    public AuthResponse(String token, User user) {
+    public AuthResponse(String token, UserResponse user) {
         this.token = token;
         this.user =  user;
     }
@@ -21,11 +21,11 @@ public class AuthResponse {
         this.token = token;
     }
 
-    public User getUser() {
+    public UserResponse getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserResponse user) {
         this.user = user;
     }
 }
