@@ -70,7 +70,7 @@ public class AuthService {
         }
         String token = jwtService.generateToken(user);
 
-        return new AuthResponse(token, user.getNome_guerra(),user.getBatalhao().getNome(),user.getMatricula(), user.getRole().name());
+        return new AuthResponse(token, user);
 
     }
 
