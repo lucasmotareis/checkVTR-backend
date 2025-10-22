@@ -16,6 +16,10 @@ public class Notification {
 
     private String descricao;
 
+    @ManyToOne
+    @JoinColumn(name = "batalhao_id")
+    private Batalhao batalhao;
+
     @CreationTimestamp
     private LocalDateTime dataCriacao;
 
@@ -25,10 +29,19 @@ public class Notification {
     }
 
     // Construtor completo (sem data, que será gerada automaticamente)
-    public Notification(String titulo, String descricao) {
+    public Notification(Batalhao batalhao, String titulo, String descricao) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.dataCriacao = LocalDateTime.now();
+        this.batalhao = batalhao;
+    }
+
+    public Batalhao getBatalhao() {
+        return batalhao;
+    }
+
+    public void setBatalhao(Batalhao batalhao) {
+        this.batalhao = batalhao;
     }
 
     // Getters e Setters

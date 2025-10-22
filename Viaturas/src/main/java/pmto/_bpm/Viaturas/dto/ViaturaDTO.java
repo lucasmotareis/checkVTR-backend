@@ -12,6 +12,9 @@ public class ViaturaDTO {
     @NotBlank(message = "O modelo não pode estar vazio.")
     private String modelo;
 
+    private boolean manutencao;
+
+    private Long batalhaoId;
 
     @NotBlank(message = "O prefixo é obrigatório.")
     private String prefixo;
@@ -23,6 +26,22 @@ public class ViaturaDTO {
     @NotNull(message = "O KM de revisão é obrigatório.")
     @Min(value = 0, message = "KM de revisão não pode ser negativo.")
     private Integer kmRevisao;
+
+    public Long getBatalhaoId() {
+        return batalhaoId;
+    }
+
+    public void setBatalhaoId(Long batalhaoId) {
+        this.batalhaoId = batalhaoId;
+    }
+
+    public boolean isManutencao() {
+        return manutencao;
+    }
+
+    public void setManutencao(boolean manutencao) {
+        this.manutencao = manutencao;
+    }
 
     public String getPlaca() {
         return placa;

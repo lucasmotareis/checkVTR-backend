@@ -10,14 +10,24 @@ public class NotificationDTO {
     @NotBlank(message = "A descrição é obrigatória.")
     private String descricao;
 
+    private Long batalhaoId;
     // Construtor padrão
     public NotificationDTO() {
     }
 
     // Construtor com argumentos
-    public NotificationDTO(String titulo, String descricao) {
+    public NotificationDTO(String titulo, String descricao, Long batalhaoId) {
         this.titulo = titulo;
         this.descricao = descricao;
+        this.batalhaoId = batalhaoId;
+    }
+
+    public Long getBatalhaoId() {
+        return batalhaoId;
+    }
+
+    public void setBatalhaoId(Long batalhaoId) {
+        this.batalhaoId = batalhaoId;
     }
 
     // Getters e Setters

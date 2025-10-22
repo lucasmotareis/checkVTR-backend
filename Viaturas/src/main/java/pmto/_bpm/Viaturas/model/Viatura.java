@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="Viatura")
+@Table(name="viatura")
 public class Viatura {
 
     @Id
@@ -18,25 +18,34 @@ public class Viatura {
     private String prefixo;
     private int km_atual;
     private int km_revisao;
+    private boolean manutencao;
 
+    @ManyToOne
+    @JoinColumn(name = "batalhao_id")
+    private Batalhao batalhao;
 
-
-    @OneToMany(mappedBy = "viatura", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<CheckList> checklists = new ArrayList<>();
 
 
     public Viatura() {
     }
 
-    public Viatura(List<CheckList> checklists, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
-        this.checklists = checklists;
+    public Viatura(Batalhao batalhao,Boolean manutencao, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
         this.km_revisao = km_revisao;
         this.km_atual = km_atual;
         this.prefixo = prefixo;
         this.placa = placa;
         this.modelo = modelo;
         this.id = id;
+        this.batalhao = batalhao;
+        this.manutencao = manutencao;
+    }
+
+    public Batalhao getBatalhao() {
+        return batalhao;
+    }
+
+    public void setBatalhao(Batalhao batalhao) {
+        this.batalhao = batalhao;
     }
 
     public String getModelo() {
@@ -87,11 +96,14 @@ public class Viatura {
         this.km_revisao = km_revisao;
     }
 
-    public List<CheckList> getChecklists() {
-        return checklists;
+
+    public boolean isManutencao() {
+        return manutencao;
     }
 
-    public void setChecklists(List<CheckList> checklists) {
-        this.checklists = checklists;
+    public void setManutencao(boolean manutencao) {
+        this.manutencao = manutencao;
     }
+
+
 }

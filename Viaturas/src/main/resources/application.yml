@@ -1,28 +1,13 @@
-#spring:
-#  datasource:
-#    url: jdbc:postgresql://aws-1-sa-east-1.pooler.supabase.com:6543/postgres
-#    username: postgres.hghlaayxdzhoudydqmuf
-#    password: pmto8bpm
-#    driver-class-name: org.postgresql.Driver
-#  jpa:
-#    hibernate:
-#      ddl-auto: update # ou "none", "validate", "create", etc.
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
 spring:
   datasource:
-    url: jdbc:postgresql://aws-1-sa-east-1.pooler.supabase.com:6543/postgres
-    username: postgres.fjtsgyqbwhjynaawvwpc
-    password: lucas3213
+    url: jdbc:postgresql://localhost:5433/frotapm
+    username: frotapm
+    password: 123456
     driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 5          # 🔧 Limita para até 5 conexões simultâneas
-      minimum-idle: 2               # Conexões mínimas ociosas mantidas no pool
-      idle-timeout: 10000           # Tempo em ms para matar conexões ociosas (10s)
-      max-lifetime: 1800000         # Tempo de vida máximo da conexão (30min)
-      connection-timeout: 30000     # Timeout de conexão (30s)
+  sql:
+    init:
+      encoding: UTF-8
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -30,3 +15,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  secret: ${JWT_SECRET}
+

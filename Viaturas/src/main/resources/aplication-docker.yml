@@ -1,9 +1,13 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/frotapm
+    url: jdbc:postgresql://localhost:5433/frotapm
     username: frotapm
     password: 123456
     driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      encoding: UTF-8
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -11,3 +15,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  secret: ${JWT_SECRET}
+
