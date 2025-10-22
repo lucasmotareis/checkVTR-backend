@@ -6,13 +6,24 @@ public class AuthResponse {
     private String token;
     private String nome_guerra;
     private String matricula;
+    private String batalhao;
     private String role;
 
-    public AuthResponse(String token, String nome_guerra, String matricula, String role) {
+    public AuthResponse(String token, String nome_guerra,String batalhao, String matricula, String role) {
         this.token = token;
         this.nome_guerra = nome_guerra;
+        this.batalhao = batalhao;
         this.matricula = matricula;
         this.role = role;
+
+    }
+
+    public String getBatalhao() {
+        return batalhao;
+    }
+
+    public void setBatalhao(String batalhao) {
+        this.batalhao = batalhao;
     }
 
     public String getToken() {
