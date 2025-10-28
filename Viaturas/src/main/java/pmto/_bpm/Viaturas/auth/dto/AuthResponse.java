@@ -1,18 +1,16 @@
 package pmto._bpm.Viaturas.auth.dto;
 
+import pmto._bpm.Viaturas.auth.model.User;
+
 public class AuthResponse {
 
 
     private String token;
-    private String nome_guerra;
-    private String matricula;
-    private String role;
+    UserResponse user;
 
-    public AuthResponse(String token, String nome_guerra, String matricula, String role) {
+    public AuthResponse(String token, UserResponse user) {
         this.token = token;
-        this.nome_guerra = nome_guerra;
-        this.matricula = matricula;
-        this.role = role;
+        this.user =  user;
     }
 
     public String getToken() {
@@ -23,27 +21,11 @@ public class AuthResponse {
         this.token = token;
     }
 
-    public String getNome_guerra() {
-        return nome_guerra;
+    public UserResponse getUser() {
+        return user;
     }
 
-    public void setNome_guerra(String nome_guerra) {
-        this.nome_guerra = nome_guerra;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public void setUser(UserResponse user) {
+        this.user = user;
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pmto._bpm.Viaturas.auth.dto.AuthResponse;
 import pmto._bpm.Viaturas.auth.dto.LoginRequest;
 import pmto._bpm.Viaturas.auth.dto.RegisterRequest;
+import pmto._bpm.Viaturas.auth.dto.UserResponse;
 import pmto._bpm.Viaturas.auth.model.Role;
 import pmto._bpm.Viaturas.auth.model.User;
 import pmto._bpm.Viaturas.auth.repository.CadastroAutorizadoRepository;
@@ -70,7 +71,9 @@ public class AuthService {
         }
         String token = jwtService.generateToken(user);
 
-        return new AuthResponse(token, user.getNome_guerra(), user.getMatricula(), user.getRole().name());
+        return new AuthResponse(token, new UserResponse(user.getNome_guerra(),user.getBatalhao().getNome()
+        ,user.getRole().toString(),user.getMatricula()));
+
 
     }
 
