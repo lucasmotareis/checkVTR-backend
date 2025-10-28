@@ -1,0 +1,11 @@
+package pmto._bpm.viaturas.auth.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+import pmto._bpm.viaturas.auth.model.CadastroAutorizado;
+
+public interface CadastroAutorizadoRepository extends JpaRepository<CadastroAutorizado, Long> {
+
+    Optional<CadastroAutorizadoRepository> findByCpfAndMatricula(String cpf, String matricula);
+
+}
