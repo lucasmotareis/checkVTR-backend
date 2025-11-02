@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(title = "CheckVTR API", version = "1.0", description = "Documentação da API CheckVTR"),
         security = { @SecurityRequirement(name = "bearerAuth") },
         servers = {
-                @Server(url = "http://localhost:8080/", description = "Servidor de Produção (HTTPS)")
+                @Server(url = "https://api.pmto8bpm.com.br/", description = "Servidor de Produção (HTTPS)")
         }
 
 )
