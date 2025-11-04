@@ -20,6 +20,7 @@ public class FeedService{
     public void adicionarEvento(Long batalhaoId, FeedDTO feed) {
         String cacheKey = "feed::" + batalhaoId;
         List<FeedDTO> eventos = getEventos(batalhaoId);
+        System.out.println("Adicionando evento ao batalhão " + batalhaoId + ": " + feed.getDescription());
 
         if (eventos.size() >= 10) {
             eventos.remove(0); // remove o mais antigo
@@ -30,6 +31,8 @@ public class FeedService{
         Cache cache = cacheManager.getCache("feed");
         if (cache != null) {
             cache.put(cacheKey, new ArrayList<>(eventos));
+            System.out.println("Eventos armazenados: " + eventos);
+
         }
     }
 
