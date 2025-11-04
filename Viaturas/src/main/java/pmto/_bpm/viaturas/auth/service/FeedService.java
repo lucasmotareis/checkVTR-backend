@@ -29,7 +29,7 @@ public class FeedService{
 
         Cache cache = cacheManager.getCache("feed");
         if (cache != null) {
-            cache.put(cacheKey, eventos);
+            cache.put(cacheKey, new ArrayList<>(eventos));
         }
     }
 
