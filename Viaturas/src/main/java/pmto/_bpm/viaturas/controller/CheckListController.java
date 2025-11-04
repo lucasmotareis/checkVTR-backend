@@ -16,12 +16,10 @@ import java.util.List;
 @RequestMapping("/checklist")
 public class CheckListController {
 
-    private final UserRepository userRepository;
     private final CheckListService checkListService;
 
-    public CheckListController(CheckListService checkListService, UserRepository userRepository) {
+    public CheckListController(CheckListService checkListService) {
         this.checkListService = checkListService;
-        this.userRepository = userRepository;
     }
 
     private User getAuthenticatedUser(Authentication authentication) {
@@ -35,7 +33,8 @@ public class CheckListController {
         try {
             User user = getAuthenticatedUser(authentication);
             CheckList checklist = checkListService.criar(dto,user);
-            return ResponseEntity.ok(checklist);
+            CheckListResponseDTO responseDTO = checkListService.toDTO(checklist);
+            return ResponseEntity.ok(responseDTO);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

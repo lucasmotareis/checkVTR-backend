@@ -2,6 +2,7 @@ package pmto._bpm.viaturas.service;
 
 import org.springframework.stereotype.Service;
 import pmto._bpm.viaturas.auth.model.User;
+import pmto._bpm.viaturas.controller.CheckListResponseDTO;
 import pmto._bpm.viaturas.dto.CheckListDTO;
 import pmto._bpm.viaturas.dto.CheckListProblemaDTO;
 import pmto._bpm.viaturas.model.CheckList;
@@ -28,7 +29,7 @@ public class CheckListService {
         this.problemaRepository = problemaRepository;
     }
 
-    public CheckListDTO criar(CheckListDTO dto, User user) {
+    public CheckList criar(CheckListDTO dto, User user) {
         Viatura viatura = viaturaRepository.findById(dto.getViaturaId())
                 .orElseThrow(() -> new RuntimeException("Viatura não encontrada."));
         CheckList checkList = new CheckList();
@@ -52,11 +53,29 @@ public class CheckListService {
             problemas.add(checklistProblema);
         }
         checkList.setProblemas(problemas);
-        checkListRepository.save(checkList);
+
+        return checkListRepository.save(checkList);
+    }
+
+
+    public CheckListResponseDTO toDTO(CheckList checkList) {
+        CheckListResponseDTO dto = new CheckListResponseDTO();
+        dto.setId(checkList.getId());
+        dto.setKmAtual(checkList.getKmAtual());
+        dto.setNomeUsuario(checkList.getUsuario().getNome_guerra());
+        dto.setImagens(checkList.getImagens());
+
+        List<CheckListProblemaDTO> problemasDTO = checkList.getProblemas().stream().map(p -> {
+            CheckListProblemaDTO dtoP = new CheckListProblemaDTO();
+            dtoP.setProblemaId(p.getProblema().getId());
+            dtoP.setObservacao(p.getObservacao());
+            return dtoP;
+        }).toList();
+
+        dto.setProblemas(problemasDTO);
 
         return dto;
     }
-
     public List<CheckList> findByViaturaId(Long id) {
         return checkListRepository.findByViaturaId(id);
     }

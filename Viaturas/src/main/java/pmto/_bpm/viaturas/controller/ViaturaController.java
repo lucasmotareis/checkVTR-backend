@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import pmto._bpm.viaturas.auth.model.User;
-import pmto._bpm.viaturas.auth.repository.UserRepository;
 import pmto._bpm.viaturas.dto.ViaturaDTO;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.viaturas.model.Viatura;
@@ -18,11 +17,9 @@ import java.util.List;
 public class ViaturaController {
 
     private final ViaturaService viaturaService;
-    private final UserRepository userRepository;
 
-    public ViaturaController(ViaturaService viaturaService, UserRepository userRepository) {
+    public ViaturaController(ViaturaService viaturaService) {
         this.viaturaService = viaturaService;
-        this.userRepository = userRepository;
     }
 
     private User getAuthenticatedUser(Authentication authentication) {
