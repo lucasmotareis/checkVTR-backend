@@ -28,7 +28,7 @@ public class CheckListService {
         this.problemaRepository = problemaRepository;
     }
 
-    public CheckList criar(CheckListDTO dto, User user) {
+    public CheckListDTO criar(CheckListDTO dto, User user) {
         Viatura viatura = viaturaRepository.findById(dto.getViaturaId())
                 .orElseThrow(() -> new RuntimeException("Viatura não encontrada."));
         CheckList checkList = new CheckList();
@@ -52,9 +52,9 @@ public class CheckListService {
             problemas.add(checklistProblema);
         }
         checkList.setProblemas(problemas);
+        checkListRepository.save(checkList);
 
-
-        return checkListRepository.save(checkList);
+        return dto;
     }
 
     public List<CheckList> findByViaturaId(Long id) {
