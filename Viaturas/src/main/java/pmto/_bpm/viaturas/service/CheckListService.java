@@ -16,6 +16,7 @@ import pmto._bpm.viaturas.repository.ProblemaRepository;
 import pmto._bpm.viaturas.repository.ViaturaRepository;
 
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,10 +62,10 @@ public class CheckListService {
         checkList.setProblemas(problemas);
 
         feedService.adicionarEvento(
-                viatura.getBatalhao().getId(),
+                user.getBatalhao().getId(),
                 new FeedDTO(
                         "Check-List",
-                        user.getNome_guerra() + " finalizou checklist da VTR " + viatura.getPrefixo() + " às " + LocalTime.now().withSecond(0).withNano(0)
+                        user.getNome_guerra() + " finalizou checklist da VTR " + viatura.getPrefixo() + " às " + LocalTime.now(ZoneId.of("America/Sao_Paulo")).withSecond(0).withNano(0)
                 )
         );
 
