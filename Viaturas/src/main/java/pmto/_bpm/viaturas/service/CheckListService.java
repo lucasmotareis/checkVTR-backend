@@ -2,7 +2,7 @@ package pmto._bpm.viaturas.service;
 
 import org.springframework.stereotype.Service;
 import pmto._bpm.viaturas.auth.model.User;
-import pmto._bpm.viaturas.controller.CheckListResponseDTO;
+import pmto._bpm.viaturas.dto.CheckListResponseDTO;
 import pmto._bpm.viaturas.dto.CheckListDTO;
 import pmto._bpm.viaturas.dto.CheckListProblemaDTO;
 import pmto._bpm.viaturas.model.CheckList;
@@ -15,6 +15,7 @@ import pmto._bpm.viaturas.repository.ViaturaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CheckListService {
@@ -47,7 +48,7 @@ public class CheckListService {
             Problema problema = problemaRepository.findById(problemaDTO.getProblemaId())
                     .orElseThrow(() -> new RuntimeException("Problema não encontrado: ID " + problemaDTO.getProblemaId()));
             CheckListProblema checklistProblema = new CheckListProblema();
-            checklistProblema.setChecklist(checkList); // associar o checklist
+            checklistProblema.setChecklist(checkList);
             checklistProblema.setProblema(problema);
             checklistProblema.setObservacao(problemaDTO.getObservacao());
             problemas.add(checklistProblema);
@@ -61,8 +62,10 @@ public class CheckListService {
     public CheckListResponseDTO toDTO(CheckList checkList) {
         CheckListResponseDTO dto = new CheckListResponseDTO();
         dto.setId(checkList.getId());
+        dto.setData(checkList.getData());
         dto.setKmAtual(checkList.getKmAtual());
-        dto.setNomeUsuario(checkList.getUsuario().getNome_guerra());
+        dto.setNomeGuerra(checkList.getUsuario().getNome_guerra());
+        dto.setMatricula(checkList.getUsuario().getMatricula());
         dto.setImagens(checkList.getImagens());
 
         List<CheckListProblemaDTO> problemasDTO = checkList.getProblemas().stream().map(p -> {
@@ -76,8 +79,16 @@ public class CheckListService {
 
         return dto;
     }
-    public List<CheckList> findByViaturaId(Long id) {
-        return checkListRepository.findByViaturaId(id);
+
+    public List<CheckListResponseDTO> findByViaturaId(Long id) {
+        List<CheckList> checklists  = checkListRepository.findByViaturaId(id);
+        List<CheckListResponseDTO> lista = new ArrayList<>();
+        for (CheckList checkList : checklists) {
+            CheckListResponseDTO dto = toDTO(checkList);
+            lista.add(dto);
+        }
+        return lista;
+
     }
 
 }

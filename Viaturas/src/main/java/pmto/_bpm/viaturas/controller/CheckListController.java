@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.viaturas.auth.model.User;
-import pmto._bpm.viaturas.auth.repository.UserRepository;
 import pmto._bpm.viaturas.dto.CheckListDTO;
+import pmto._bpm.viaturas.dto.CheckListResponseDTO;
 import pmto._bpm.viaturas.model.CheckList;
 import pmto._bpm.viaturas.service.CheckListService;
 
@@ -43,7 +43,7 @@ public class CheckListController {
     }
 
     @GetMapping("/viaturas/{id}/checklists")
-    public List<CheckList> getChecklistsByViatura(@PathVariable Long id) {
+    public List<CheckListResponseDTO> getChecklistsByViatura(@PathVariable Long id) {
         return checkListService.findByViaturaId(id);
     }
 }
