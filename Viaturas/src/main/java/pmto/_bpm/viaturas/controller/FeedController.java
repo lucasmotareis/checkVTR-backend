@@ -25,4 +25,6 @@ public class FeedController {
         List<FeedDTO> feed = feedService.getEventos(batalhaoId);
         return ResponseEntity.ok(feed);
     }
+
+    
 }

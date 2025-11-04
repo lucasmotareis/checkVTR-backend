@@ -18,36 +18,48 @@ public class FeedService{
     }
 
     public void adicionarEvento(Long batalhaoId, FeedDTO feed) {
-        String cacheKey = "feed::" + batalhaoId;
-        List<FeedDTO> eventos = getEventos(batalhaoId);
         System.out.println("Adicionando evento ao batalhão " + batalhaoId + ": " + feed.getDescription());
 
+        Cache cache = cacheManager.getCache("ultimosChecklists");
+
+        if (cache == null) {
+            System.out.println("Cache 'ultimosChecklists' não encontrado.");
+            return;
+        }
+        List<FeedDTO> eventos = cache.get(batalhaoId, List.class);
+
+        if (eventos == null) {
+            eventos = new ArrayList<>(); // Se não existir ainda, cria nova lista
+        }
+
         if (eventos.size() >= 10) {
-            eventos.remove(0); // remove o mais antigo
+            eventos.remove(0); // Remove o mais antigo
         }
 
         eventos.add(feed);
 
-        Cache cache = cacheManager.getCache("feed");
-        if (cache != null) {
-            cache.put(cacheKey, new ArrayList<>(eventos));
-            System.out.println("Eventos armazenados: " + eventos);
+        cache.put(batalhaoId, eventos);
 
-        }
+        System.out.println("Eventos armazenados: " + eventos);
+
+
+
     }
+
+
 
     @SuppressWarnings("unchecked")
     public List<FeedDTO> getEventos(Long batalhaoId) {
-        String cacheKey = "feed::" + batalhaoId;
-        Cache cache = cacheManager.getCache("feed");
+        Cache cache = cacheManager.getCache("ultimosChecklists");
         if (cache != null) {
-            List<FeedDTO> eventos = cache.get(cacheKey, List.class);
+            List<FeedDTO> eventos = cache.get(batalhaoId, List.class);
             if (eventos != null) {
                 return new ArrayList<>(eventos);
             }
         }
         return new ArrayList<>();
     }
+
 
 
 }

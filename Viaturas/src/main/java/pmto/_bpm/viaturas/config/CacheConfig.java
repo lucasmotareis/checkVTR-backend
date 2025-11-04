@@ -8,15 +8,15 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
-@EnableCaching
 @Configuration
+@EnableCaching
 public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
         CaffeineCacheManager manager = new CaffeineCacheManager("ultimosChecklists", "viaturasPorStatus", "ranking");
         manager.setCaffeine(Caffeine.newBuilder()
-                .expireAfterWrite(5, TimeUnit.MINUTES)  // atualiza a cada 5 min
+                .expireAfterWrite(1, TimeUnit.MINUTES)  // atualiza a cada 5 min
                 .maximumSize(1000));
         return manager;
     }
