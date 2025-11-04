@@ -15,7 +15,7 @@ public class CheckListDTO {
 
 
     @Min(value = 1, message = "KM deve ser maior que zero")
-    private Integer KmAtual;
+    private Integer kmAtual;
 
     private List<String> imagens = new ArrayList<>();
 
@@ -23,16 +23,21 @@ public class CheckListDTO {
         return imagens;
     }
 
+
+    public void setViaturaId(Long viaturaId) {
+        this.viaturaId = viaturaId;
+    }
+
     public void setImagens(List<String> imagens) {
         this.imagens = imagens;
     }
 
     public Integer getKmAtual() {
-        return this.KmAtual;
+        return this.kmAtual;
     }
 
     public void setKmAtual(Integer kmAtual) {
-        this.KmAtual = kmAtual;
+        this.kmAtual = kmAtual;
     }
 
 

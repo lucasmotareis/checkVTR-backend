@@ -4,6 +4,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import pmto._bpm.viaturas.auth.model.User;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,6 +22,11 @@ public class CheckList {
     @JoinColumn(name = "viatura_id")
     @JsonBackReference
     private Viatura viatura;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonBackReference
+    private User usuario;
 
     @ElementCollection
     @CollectionTable(name = "checklist_images", joinColumns = @JoinColumn(name = "checklist_id"))
@@ -38,7 +45,8 @@ public class CheckList {
         this.data = LocalDateTime.now();
     }
 
-    public CheckList(List<CheckListProblema> problemas, Integer kmAtual, List<String> imagens, Viatura viatura, Long id, LocalDateTime data) {
+    public CheckList(User usuario, List<CheckListProblema> problemas, Integer kmAtual, List<String> imagens, Viatura viatura, Long id, LocalDateTime data) {
+        this.usuario = usuario;
         this.problemas = problemas;
         this.kmAtual = kmAtual;
         this.imagens = imagens;
@@ -71,7 +79,13 @@ public class CheckList {
         this.viatura = viatura;
     }
 
+    public User getUsuario() {
+        return usuario;
+    }
 
+    public void setUsuario(User usuario) {
+        this.usuario = usuario;
+    }
 
     public LocalDateTime getData() {
         return data;

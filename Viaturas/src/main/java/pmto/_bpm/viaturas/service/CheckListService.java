@@ -1,6 +1,7 @@
 package pmto._bpm.viaturas.service;
 
 import org.springframework.stereotype.Service;
+import pmto._bpm.viaturas.auth.model.User;
 import pmto._bpm.viaturas.dto.CheckListDTO;
 import pmto._bpm.viaturas.dto.CheckListProblemaDTO;
 import pmto._bpm.viaturas.model.CheckList;
@@ -27,13 +28,13 @@ public class CheckListService {
         this.problemaRepository = problemaRepository;
     }
 
-    public CheckList criar(CheckListDTO dto) {
+    public CheckList criar(CheckListDTO dto, User user) {
         Viatura viatura = viaturaRepository.findById(dto.getViaturaId())
                 .orElseThrow(() -> new RuntimeException("Viatura não encontrada."));
         CheckList checkList = new CheckList();
         checkList.setViatura(viatura);
         checkList.setImagens(dto.getImagens());
-
+        checkList.setUsuario(user);
         if (dto.getKmAtual() != null && dto.getKmAtual() > 0) {
             checkList.setKmAtual(dto.getKmAtual());
             viatura.setKm_atual(dto.getKmAtual());
