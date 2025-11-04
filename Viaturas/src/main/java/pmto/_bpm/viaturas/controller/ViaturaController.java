@@ -54,6 +54,7 @@ public class ViaturaController {
         Viatura nova = viaturaService.save(dto);
         return ResponseEntity.ok(nova);
     }
+
     @PutMapping("viatura/{id}")
     @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
     public ResponseEntity<?> atualizarViatura(@PathVariable Long id, @RequestBody @Valid ViaturaDTO dto, Authentication auth) {
@@ -63,6 +64,10 @@ public class ViaturaController {
         if (!viatura.getBatalhao().getId().equals(user.getBatalhao().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode alterar viaturas de outro batalhão.");
         }
+
+       /* if (viatura.isManutencao() != dto.isManutencao()) {
+
+        }*/
 
         Viatura atualizada = viaturaService.atualizar(id, dto);
         return ResponseEntity.ok(atualizada);

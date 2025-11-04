@@ -4,13 +4,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import pmto._bpm.viaturas.auth.dto.FeedDTO;
 import pmto._bpm.viaturas.auth.service.FeedService;
 import pmto._bpm.viaturas.service.CheckListService;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class FeedController {
 
     private final  FeedService feedService;
