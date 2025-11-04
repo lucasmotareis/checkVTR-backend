@@ -1,7 +1,9 @@
 package pmto._bpm.viaturas.service;
 
 import org.springframework.stereotype.Service;
+import pmto._bpm.viaturas.auth.dto.FeedDTO;
 import pmto._bpm.viaturas.auth.model.User;
+import pmto._bpm.viaturas.auth.service.FeedService;
 import pmto._bpm.viaturas.dto.CheckListResponseDTO;
 import pmto._bpm.viaturas.dto.CheckListDTO;
 import pmto._bpm.viaturas.dto.CheckListProblemaDTO;
@@ -13,6 +15,7 @@ import pmto._bpm.viaturas.repository.CheckListRepository;
 import pmto._bpm.viaturas.repository.ProblemaRepository;
 import pmto._bpm.viaturas.repository.ViaturaRepository;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +26,10 @@ public class CheckListService {
     private final CheckListRepository checkListRepository;
     private final ViaturaRepository viaturaRepository;
     private final ProblemaRepository problemaRepository;
+    private final FeedService feedService;
 
-    public CheckListService(CheckListRepository checkListRepository, ViaturaRepository viaturaRepository, ProblemaRepository problemaRepository) {
+    public CheckListService(FeedService feedService, CheckListRepository checkListRepository, ViaturaRepository viaturaRepository, ProblemaRepository problemaRepository) {
+        this.feedService = feedService;
         this.checkListRepository = checkListRepository;
         this.viaturaRepository = viaturaRepository;
         this.problemaRepository = problemaRepository;
@@ -54,6 +59,14 @@ public class CheckListService {
             problemas.add(checklistProblema);
         }
         checkList.setProblemas(problemas);
+
+        feedService.adicionarEvento(
+                viatura.getBatalhao().getId(),
+                new FeedDTO(
+                        "Check-List",
+                        user.getNome_guerra() + " finalizou checklist da VTR " + viatura.getPrefixo() + " às " + LocalTime.now().withSecond(0).withNano(0)
+                )
+        );
 
         return checkListRepository.save(checkList);
     }

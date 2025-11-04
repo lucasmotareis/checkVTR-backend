@@ -5,8 +5,10 @@ public class UserResponse {
     private String batalhao;
     private String matricula;
     private String role;
+    private Long idBatalhao;
 
-    public UserResponse(String nome_guerra, String batalhao, String role, String matricula) {
+    public UserResponse(Long idBatalhao,String nome_guerra, String batalhao, String role, String matricula) {
+        this.idBatalhao = idBatalhao;
         this.nome_guerra = nome_guerra;
         this.batalhao = batalhao;
         this.role = role;
@@ -19,6 +21,14 @@ public class UserResponse {
 
     public void setNome_guerra(String nome_guerra) {
         this.nome_guerra = nome_guerra;
+    }
+
+    public Long getIdBatalhao() {
+        return idBatalhao;
+    }
+
+    public void setIdBatalhao(Long idBatalhao) {
+        this.idBatalhao = idBatalhao;
     }
 
     public String getBatalhao() {
