@@ -42,8 +42,6 @@ public class FeedService{
 
         System.out.println("Eventos armazenados: " + eventos);
 
-
-
     }
 
 

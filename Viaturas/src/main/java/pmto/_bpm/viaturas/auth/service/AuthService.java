@@ -53,7 +53,7 @@ public class AuthService {
         user.setMatricula( dto.getMatricula() );
         user.setCPF(dto.getCpf() );
         user.setSenha(passwordEncoder.encode(dto.getSenha()));
-        user.setNome_guerra( dto.getNome_guerra() );
+        user.setNome_guerra( dto.getNomeGuerra() );
         user.setRole(Role.valueOf("MOTORISTA"));
         user.setBatalhao(batalhao);
         userRepository.save(user);
@@ -71,8 +71,7 @@ public class AuthService {
         }
         String token = jwtService.generateToken(user);
 
-        return new AuthResponse(token, new UserResponse(user.getBatalhao().getId(),user.getNome_guerra(),user.getBatalhao().getNome()
-        ,user.getRole().toString(),user.getMatricula()));
+        return new AuthResponse(token, new UserResponse(user));
 
 
     }
