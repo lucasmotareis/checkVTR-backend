@@ -14,12 +14,11 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(
+        config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5173",        // FRONT LOCAL
-                "https://pmto8bpm.com.br",      // FRONT PRODUÇÃO (se tiver)
-                "https://www.pmto8bpm.com.br"   // WWW também
+                "https://pmto8bpm.com.br"
         ));
-        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "X-Client-Type"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
 
