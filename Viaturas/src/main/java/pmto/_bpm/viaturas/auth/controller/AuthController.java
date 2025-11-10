@@ -70,5 +70,19 @@ public class AuthController {
         return ResponseEntity.ok(new UserResponse(user)); // Retorna apenas dados seguros
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("Strict")
+                .maxAge(0)  // Remove o cookie
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
+
+        return ResponseEntity.ok().build();
+    }
 
 }
