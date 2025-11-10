@@ -1,6 +1,8 @@
 package pmto._bpm.viaturas.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +45,11 @@ public class CheckListController {
     }
 
     @GetMapping("/viaturas/{id}/checklists")
-    public List<CheckListResponseDTO> getChecklistsByViatura(@PathVariable Long id) {
-        return checkListService.findByViaturaId(id);
+    public ResponseEntity<Page<CheckListResponseDTO>> getChecklistsByViatura(
+            @PathVariable Long id,
+            Pageable pageable
+    ) {
+        Page<CheckListResponseDTO> result = checkListService.findByViaturaId(id, pageable);
+        return ResponseEntity.ok(result);
     }
 }

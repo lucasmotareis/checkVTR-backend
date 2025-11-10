@@ -14,6 +14,8 @@ import pmto._bpm.viaturas.model.Viatura;
 import pmto._bpm.viaturas.repository.CheckListRepository;
 import pmto._bpm.viaturas.repository.ProblemaRepository;
 import pmto._bpm.viaturas.repository.ViaturaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -94,14 +96,10 @@ public class CheckListService {
         return dto;
     }
 
-    public List<CheckListResponseDTO> findByViaturaId(Long id) {
-        List<CheckList> checklists  = checkListRepository.findByViaturaId(id);
-        List<CheckListResponseDTO> lista = new ArrayList<>();
-        for (CheckList checkList : checklists) {
-            CheckListResponseDTO dto = toDTO(checkList);
-            lista.add(dto);
-        }
-        return lista;
+    public Page<CheckListResponseDTO> findByViaturaId(Long id, Pageable pageable) {
+        Page<CheckList> page = checkListRepository.findByViaturaId(id, pageable);
+
+        return page.map(this::toDTO); // Mapeia cada entidade para DTO
 
     }
 
