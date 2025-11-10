@@ -41,7 +41,7 @@ public class AuthController {
                     .secure(true) // use true em produção com HTTPS
                     .path("/")
                     .maxAge(Duration.ofHours(1))
-                    .sameSite("Lax")
+                    .sameSite("None")
                     .build();
 
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
