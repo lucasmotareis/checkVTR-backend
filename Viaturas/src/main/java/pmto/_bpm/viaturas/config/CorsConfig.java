@@ -15,7 +15,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://localhost:5173", "exp://192.168.10.103:8081")); // ou usar AllowedOriginPatterns
+        config.setAllowedOrigins(List.of("https://localhost:5173", "https://pmto8bpm.com.br")); // ou usar AllowedOriginPatterns
         config.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept", "Authorization",  "X-Client-Type", "Access-Control-Allow-Credentials"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
