@@ -36,7 +36,7 @@ public class AuthController {
 
         AuthResponse token = authService.login(dto);
 
-        if (!"CHEFE_DE_TRANSPORTE".equals(token.getUser().getRole()) && "web".equalsIgnoreCase(clientType)) {
+        if (!"CHEFE_TRANSPORTE".equals(token.getUser().getRole()) && "web".equalsIgnoreCase(clientType)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso restrito a chefes de transporte.");
         }
 
@@ -47,7 +47,7 @@ public class AuthController {
                     .secure(true) // use true em produção com HTTPS
                     .path("/")
                     .maxAge(Duration.ofHours(1))
-                    .sameSite("None")
+                    .sameSite("Strict")
                     .build();
 
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

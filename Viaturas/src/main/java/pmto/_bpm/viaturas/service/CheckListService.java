@@ -48,8 +48,10 @@ public class CheckListService {
         if (dto.getKmAtual() != null && dto.getKmAtual() > 0) {
             checkList.setKmAtual(dto.getKmAtual());
             viatura.setKm_atual(dto.getKmAtual());
+            viatura.setKm_revisao(dto.getKmRevisao());
             viaturaRepository.save(viatura);
         }
+        checkList.setKmRevisao(dto.getKmRevisao());
 
         List<CheckListProblema> problemas = new ArrayList<>();
         for (CheckListProblemaDTO problemaDTO : dto.getProblemas()) {
@@ -80,6 +82,7 @@ public class CheckListService {
         dto.setId(checkList.getId());
         dto.setData(checkList.getData());
         dto.setKmAtual(checkList.getKmAtual());
+        dto.setKmRevisao(checkList.getKmRevisao());
         dto.setNomeGuerra(checkList.getUsuario().getNome_guerra());
         dto.setMatricula(checkList.getUsuario().getMatricula());
         dto.setImagens(checkList.getImagens());
@@ -87,6 +90,8 @@ public class CheckListService {
         List<CheckListProblemaDTO> problemasDTO = checkList.getProblemas().stream().map(p -> {
             CheckListProblemaDTO dtoP = new CheckListProblemaDTO();
             dtoP.setProblemaId(p.getProblema().getId());
+            dtoP.setCategoria(p.getProblema().getCategoria());
+            dtoP.setProblemaNome(p.getProblema().getDescricao());
             dtoP.setObservacao(p.getObservacao());
             return dtoP;
         }).toList();
@@ -96,11 +101,15 @@ public class CheckListService {
         return dto;
     }
 
+    public Page<CheckListResponseDTO> findAll(Pageable pageable) {
+        Page<CheckList> page = checkListRepository.findAll(pageable);
+        return page.map(this::toDTO); // converte cada CheckList para DTO
+    }
+
     public Page<CheckListResponseDTO> findByViaturaId(Long id, Pageable pageable) {
         Page<CheckList> page = checkListRepository.findByViaturaId(id, pageable);
 
         return page.map(this::toDTO); // Mapeia cada entidade para DTO
-
 
     }
 

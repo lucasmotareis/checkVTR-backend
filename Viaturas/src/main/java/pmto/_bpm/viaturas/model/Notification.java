@@ -1,11 +1,15 @@
 package pmto._bpm.viaturas.model;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications")
+@Getter
+@Setter
 public class Notification {
 
     @Id
@@ -36,36 +40,5 @@ public class Notification {
         this.batalhao = batalhao;
     }
 
-    public Batalhao getBatalhao() {
-        return batalhao;
-    }
 
-    public void setBatalhao(Batalhao batalhao) {
-        this.batalhao = batalhao;
-    }
-
-    // Getters e Setters
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
 }

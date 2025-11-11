@@ -2,9 +2,13 @@ package pmto._bpm.viaturas.model;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="batalhao")
+@Getter
+@Setter
 public class Batalhao {
 
     @Id
@@ -16,19 +20,5 @@ public class Batalhao {
     public Batalhao() {
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public Batalhao(String nome) {
-        this.nome = nome;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 }

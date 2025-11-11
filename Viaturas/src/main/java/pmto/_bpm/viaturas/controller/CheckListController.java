@@ -44,6 +44,15 @@ public class CheckListController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<Page<CheckListResponseDTO>> getAllChecklists(Pageable pageable) {
+        Page<CheckListResponseDTO> result = checkListService.findAll(pageable);
+        return ResponseEntity.ok(result);
+    }
+
+
+
+
     @GetMapping("/viaturas/{id}/checklists")
     public ResponseEntity<Page<CheckListResponseDTO>> getChecklistsByViatura(
             @PathVariable Long id,

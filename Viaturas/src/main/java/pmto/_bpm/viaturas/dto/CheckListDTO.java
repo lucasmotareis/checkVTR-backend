@@ -1,10 +1,14 @@
 package pmto._bpm.viaturas.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 public class CheckListDTO {
 
     @NotNull(message = "ID da viatura é obrigatório.")
@@ -17,39 +21,9 @@ public class CheckListDTO {
     @Min(value = 1, message = "KM deve ser maior que zero")
     private Integer kmAtual;
 
+    @Min(value = 1, message = "KM deve ser maior que zero")
+    private Integer kmRevisao;
+
     private List<String> imagens = new ArrayList<>();
 
-    public List<String> getImagens() {
-        return imagens;
-    }
-
-
-    public void setViaturaId(Long viaturaId) {
-        this.viaturaId = viaturaId;
-    }
-
-    public void setImagens(List<String> imagens) {
-        this.imagens = imagens;
-    }
-
-    public Integer getKmAtual() {
-        return this.kmAtual;
-    }
-
-    public void setKmAtual(Integer kmAtual) {
-        this.kmAtual = kmAtual;
-    }
-
-
-    public Long getViaturaId() {
-        return this.viaturaId;
-    }
-
-    public List<CheckListProblemaDTO> getProblemas() {
-        return problemas;
-    }
-
-    public void setProblemas(List<CheckListProblemaDTO> problemas) {
-        this.problemas = problemas;
-    }
 }

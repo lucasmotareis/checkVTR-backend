@@ -33,7 +33,7 @@ public class FeedService{
         }
 
         if (eventos.size() >= 10) {
-            eventos.remove(0); // Remove o mais antigo
+            eventos.removeFirst();
         }
 
         eventos.add(feed);
