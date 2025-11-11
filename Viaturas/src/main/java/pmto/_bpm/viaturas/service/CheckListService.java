@@ -101,6 +101,7 @@ public class CheckListService {
 
         return page.map(this::toDTO); // Mapeia cada entidade para DTO
 
+
     }
 
 }

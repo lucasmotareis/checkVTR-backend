@@ -3,6 +3,7 @@ package pmto._bpm.viaturas.auth.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,11 @@ public class AuthController {
 
 
         AuthResponse token = authService.login(dto);
+
+        if (!"CHEFE_DE_TRANSPORTE".equals(token.getUser().getRole()) && "web".equalsIgnoreCase(clientType)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso restrito a chefes de transporte.");
+        }
+
 
         if ("web".equalsIgnoreCase(clientType)) {
             ResponseCookie cookie = ResponseCookie.from("token", token.getToken())
