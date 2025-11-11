@@ -23,6 +23,11 @@ services:
       - "traefik.http.routers.frotapm.tls=true"
       - "traefik.http.routers.frotapm.tls.certresolver=letsencrypt"
       - "traefik.http.services.frotapm.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.frotapm-cors.headers.accessControlAllowOriginList=https://localhost:5173"
+      - "traefik.http.middlewares.frotapm-cors.headers.accessControlAllowMethods=GET,POST,OPTIONS,PUT,DELETE"
+      - "traefik.http.middlewares.frotapm-cors.headers.accessControlAllowHeaders=Origin, Content-Type, Accept, Authorization,  X-Client-Type, Access-Control-Allow-Credentials"
+      - "traefik.http.middlewares.frotapm-cors.headers.accessControlAllowCredentials=true"
+
 
 
   db:
