@@ -82,6 +82,7 @@ public class CheckListService {
         dto.setId(checkList.getId());
         dto.setData(checkList.getData());
         dto.setKmAtual(checkList.getKmAtual());
+        dto.setPrefixo(checkList.getViatura().getPrefixo());
         dto.setKmRevisao(checkList.getKmRevisao());
         dto.setNomeGuerra(checkList.getUsuario().getNome_guerra());
         dto.setMatricula(checkList.getUsuario().getMatricula());

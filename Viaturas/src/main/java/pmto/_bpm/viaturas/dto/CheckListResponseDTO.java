@@ -14,11 +14,11 @@ public class CheckListResponseDTO {
     private Integer kmRevisao;
     private String nomeGuerra;
     private String matricula;
+    private String prefixo;
     private LocalDateTime data;
 
     private List<String> imagens;
     private List<CheckListProblemaDTO> problemas;
-
 
 }
 
