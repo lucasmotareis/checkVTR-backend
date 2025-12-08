@@ -33,7 +33,7 @@ public class JwtService {
                 .setSubject(user.getMatricula())
                 .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1))) // 1 dia
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15))) // 1 dia
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
