@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public class RegisterRequest {
 
     @NotBlank
-    private String nome_guerra;
+    private String nomeGuerra;
 
     @NotBlank
     private String senha;
@@ -30,12 +30,12 @@ public class RegisterRequest {
         this.batalhaoId = batalhaoId;
     }
 
-    public String getNome_guerra() {
-        return nome_guerra;
+    public String getNomeGuerra() {
+        return nomeGuerra;
     }
 
-    public void setNome_guerra(String nome_guerra) {
-        this.nome_guerra = nome_guerra;
+    public void setNomeGuerra(String nomeGuerra) {
+        this.nomeGuerra = nomeGuerra;
     }
 
     public String getSenha() {
