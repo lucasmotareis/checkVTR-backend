@@ -10,6 +10,7 @@ import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.auth.model.User;
 import pmto._bpm.viaturas.auth.repository.CadastroAutorizadoRepository;
 import pmto._bpm.viaturas.auth.repository.UserRepository;
+import pmto._bpm.viaturas.exception.RegisterException;
 import pmto._bpm.viaturas.model.Batalhao;
 import pmto._bpm.viaturas.repository.BatalhaoRepository;
 
@@ -42,11 +43,11 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalArgumentException("Batalhão não encontrado"));
 
         if (autorizado.isEmpty()) {
-            throw new IllegalArgumentException("CPF e Matrícula não autorizados.");
+            throw new RegisterException("CPF e Matrícula não autorizados.");
         }
 
         if (userRepository.existsByCPF(dto.getCpf()) || userRepository.existsByMatricula(dto.getMatricula())) {
-            throw new IllegalArgumentException("Usuário já cadastrado. Entre em contato com o Suporte.");
+            throw new RegisterException("Usuário já cadastrado. Entre em contato com o Suporte.");
         }
 
         User user = new User();
@@ -64,10 +65,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest dto) {
         User user = userRepository.findByMatricula(dto.getMatricula())
-                .orElseThrow(()-> new IllegalArgumentException("Usuário não encontrado."));
+                .orElseThrow(()-> new RegisterException("Matrícula não encontrada."));
 
         if (!passwordEncoder.matches(dto.getSenha(), user.getSenha())) {
-            throw new IllegalArgumentException("Senha inválida.");
+            throw new RegisterException("Senha inválida.");
         }
         String token = jwtService.generateToken(user);
 

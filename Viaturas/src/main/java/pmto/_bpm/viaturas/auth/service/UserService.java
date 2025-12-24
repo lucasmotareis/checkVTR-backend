@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pmto._bpm.viaturas.auth.repository.UserRepository;
+import pmto._bpm.viaturas.exception.RegisterException;
 
 @Service
 public class UserService implements UserDetailsService{
@@ -15,9 +16,9 @@ public class UserService implements UserDetailsService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String matricula) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String matricula) throws RegisterException {
         return userRepository.findByMatricula(matricula)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com matrícula: " + matricula));
+                .orElseThrow(() -> new RegisterException("Usuário não encontrado com matrícula: " + matricula));
     }
 
 }

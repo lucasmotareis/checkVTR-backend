@@ -23,7 +23,7 @@ public class AwsS3Service {
     public List<String> generatePresignedUrls(ChecklistUploadRequestDTO request) {
 
 
-        Region region = Region.of("us-east-2"); // Substitua pela sua região
+        Region region = Region.of("sa-east-1"); // Substitua pela sua região
 
         S3Presigner presigner = S3Presigner.builder()
                 .region(region)
@@ -47,13 +47,13 @@ public class AwsS3Service {
                     fileName);
 
             PutObjectRequest objectRequest = PutObjectRequest.builder()
-                    .bucket("fotos-viatura-pmto")
+                    .bucket("fotos-viaturas")
                     .key(key)
                     .contentType("image/jpeg")
                     .build();
 
             PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofMinutes(1))
+                    .signatureDuration(Duration.ofMinutes(10))
                     .putObjectRequest(objectRequest)
                     .build();
 
