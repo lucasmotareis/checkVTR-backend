@@ -16,7 +16,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome_guerra;
+    private String nomeGuerra;
 
     @ManyToOne
     @JoinColumn(name = "batalhao_id")
@@ -30,39 +30,52 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String matricula;
 
+    @Column(name = "foto_perfil_url")
+    private String fotoPerfilUrl;
+
+    @Column(name = "cnh_url")
+    private String cnhKey;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     public User() {
     }
 
-    public User(Batalhao batalhao, String nome_guerra, String senha, String CPF, String matricula, Role role) {
-        this.nome_guerra = nome_guerra;
-        this.senha = senha;
-        this.CPF = CPF;
-        this.matricula = matricula;
-        this.role = role;
-        this.batalhao = batalhao;
-    }
-
-    public Batalhao getBatalhao() {
-        return batalhao;
-    }
-
-    public void setBatalhao(Batalhao batalhao) {
-        this.batalhao = batalhao;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public String getNome_guerra() {
-        return nome_guerra;
+    public Role getRole() {
+        return role;
     }
 
-    public void setNome_guerra(String nome_guerra) {
-        this.nome_guerra = nome_guerra;
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getFotoPerfilUrl() {
+        return fotoPerfilUrl;
+    }
+
+    public void setFotoPerfilUrl(String fotoPerfilUrl) {
+        this.fotoPerfilUrl = fotoPerfilUrl;
+    }
+
+    public String getCnhKey() {
+        return cnhKey;
+    }
+
+    public void setCnhKey(String cnhKey) {
+        this.cnhKey = cnhKey;
+    }
+
+    public String getNomeGuerra() {
+        return nomeGuerra;
+    }
+
+    public void setNomeGuerra(String nomeGuerra) {
+        this.nomeGuerra = nomeGuerra;
     }
 
     public String getSenha() {
@@ -71,6 +84,14 @@ public class User implements UserDetails {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Batalhao getBatalhao() {
+        return batalhao;
+    }
+
+    public void setBatalhao(Batalhao batalhao) {
+        this.batalhao = batalhao;
     }
 
     public String getCPF() {
@@ -89,13 +110,15 @@ public class User implements UserDetails {
         this.matricula = matricula;
     }
 
-    public Role getRole() {
-        return role;
+    public User(Batalhao batalhao, String nomeGuerra, String senha, String cpf, String matricula, Role role) {
+        this.nomeGuerra = nomeGuerra;
+        this.senha = senha;
+        this.CPF = cpf;
+        this.matricula = matricula;
+        this.role = role;
+        this.batalhao = batalhao;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

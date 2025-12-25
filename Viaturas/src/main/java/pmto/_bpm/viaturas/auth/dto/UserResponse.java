@@ -11,7 +11,7 @@ public class UserResponse {
 
     public UserResponse(User user) {
         this.idBatalhao = user.getBatalhao().getId();
-        this.nomeGuerra = user.getNome_guerra();
+        this.nomeGuerra = user.getNomeGuerra();
         this.batalhao = user.getBatalhao().getNome();
         this.role = user.getRole().toString();
         this.matricula = user.getMatricula();

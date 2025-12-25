@@ -21,7 +21,6 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CheckListService {
@@ -69,7 +68,7 @@ public class CheckListService {
                 user.getBatalhao().getId(),
                 new FeedDTO(
                         "Check-List",
-                        user.getNome_guerra() + " finalizou checklist da VTR " + viatura.getPrefixo() + " às " + LocalTime.now(ZoneId.of("America/Sao_Paulo")).withSecond(0).withNano(0)
+                        user.getNomeGuerra() + " finalizou checklist da VTR " + viatura.getPrefixo() + " às " + LocalTime.now(ZoneId.of("America/Sao_Paulo")).withSecond(0).withNano(0)
                 )
         );
 
@@ -84,7 +83,7 @@ public class CheckListService {
         dto.setKmAtual(checkList.getKmAtual());
         dto.setPrefixo(checkList.getViatura().getPrefixo());
         dto.setKmRevisao(checkList.getKmRevisao());
-        dto.setNomeGuerra(checkList.getUsuario().getNome_guerra());
+        dto.setNomeGuerra(checkList.getUsuario().getNomeGuerra());
         dto.setMatricula(checkList.getUsuario().getMatricula());
         dto.setImagens(checkList.getImagens());
 

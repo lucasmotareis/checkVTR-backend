@@ -54,7 +54,7 @@ public class AuthService {
         user.setMatricula( dto.getMatricula() );
         user.setCPF(dto.getCpf() );
         user.setSenha(passwordEncoder.encode(dto.getSenha()));
-        user.setNome_guerra( dto.getNomeGuerra() );
+        user.setNomeGuerra( dto.getNomeGuerra() );
         user.setRole(Role.valueOf("MOTORISTA"));
         user.setBatalhao(batalhao);
         userRepository.save(user);
