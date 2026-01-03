@@ -75,6 +75,11 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.deepoove</groupId>
+			<artifactId>poi-tl</artifactId>
+			<version>1.12.2</version>
+		</dependency>
 		<!-- API do JJWT -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
