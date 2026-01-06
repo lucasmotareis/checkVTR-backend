@@ -4,10 +4,16 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import pmto._bpm.viaturas.auth.model.User;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "checklist")
+@Getter
+@Setter
 public class CheckList {
 
     @Id
@@ -21,6 +27,11 @@ public class CheckList {
     @JsonBackReference
     private Viatura viatura;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonBackReference
+    private User usuario;
+
     @ElementCollection
     @CollectionTable(name = "checklist_images", joinColumns = @JoinColumn(name = "checklist_id"))
     @Column(name = "image_url")
@@ -28,74 +39,25 @@ public class CheckList {
 
     private Integer kmAtual;
 
+    private Integer kmRevisao;
+
     @OneToMany(mappedBy = "checklist", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<CheckListProblema> problemas = new ArrayList<>();
-
 
 
     public CheckList() {
         this.data = LocalDateTime.now();
     }
 
-    public CheckList(List<CheckListProblema> problemas, Integer kmAtual, List<String> imagens, Viatura viatura, Long id, LocalDateTime data) {
+    public CheckList(Integer kmRevisao, User usuario, List<CheckListProblema> problemas, Integer kmAtual, List<String> imagens, Viatura viatura, Long id, LocalDateTime data) {
+        this.kmRevisao = kmRevisao;
+        this.usuario = usuario;
         this.problemas = problemas;
         this.kmAtual = kmAtual;
         this.imagens = imagens;
         this.viatura = viatura;
         this.id = id;
         this.data = data;
-    }
-
-    public Integer getKmAtual() {
-        return kmAtual;
-    }
-
-    public void setKmAtual(Integer kmAtual) {
-        this.kmAtual = kmAtual;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Viatura getViatura() {
-        return viatura;
-    }
-
-    public void setViatura(Viatura viatura) {
-        this.viatura = viatura;
-    }
-
-
-
-    public LocalDateTime getData() {
-        return data;
-    }
-
-    public void setData(LocalDateTime data) {
-        this.data = data;
-    }
-
-    public List<String> getImagens() {
-        return imagens;
-    }
-
-    public void setImagens(List<String> imagens) {
-        this.imagens = imagens;
-    }
-
-    public List<CheckListProblema> getProblemas() {
-        return problemas;
-    }
-
-
-
-    public void setProblemas(List<CheckListProblema> problemas) {
-        this.problemas = problemas;
     }
 }

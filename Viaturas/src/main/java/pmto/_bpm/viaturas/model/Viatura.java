@@ -1,9 +1,13 @@
 package pmto._bpm.viaturas.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="viatura")
+@Getter
+@Setter
 public class Viatura {
 
     @Id
@@ -37,70 +41,6 @@ public class Viatura {
         this.manutencao = manutencao;
     }
 
-    public Batalhao getBatalhao() {
-        return batalhao;
-    }
-
-    public void setBatalhao(Batalhao batalhao) {
-        this.batalhao = batalhao;
-    }
-
-    public String getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getPlaca() {
-        return placa;
-    }
-
-    public void setPlaca(String placa) {
-        this.placa = placa;
-    }
-
-    public String getPrefixo() {
-        return prefixo;
-    }
-
-    public void setPrefixo(String prefixo) {
-        this.prefixo = prefixo;
-    }
-
-    public int getKm_atual() {
-        return km_atual;
-    }
-
-    public void setKm_atual(int km_atual) {
-        this.km_atual = km_atual;
-    }
-
-    public int getKm_revisao() {
-        return km_revisao;
-    }
-
-    public void setKm_revisao(int km_revisao) {
-        this.km_revisao = km_revisao;
-    }
-
-
-    public boolean isManutencao() {
-        return manutencao;
-    }
-
-    public void setManutencao(boolean manutencao) {
-        this.manutencao = manutencao;
-    }
 
 
 }
