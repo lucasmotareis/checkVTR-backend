@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import pmto._bpm.viaturas.auth.model.User;
 import pmto._bpm.viaturas.auth.repository.UserRepository;
+import pmto._bpm.viaturas.dto.ViaturaByIdDTO;
 import pmto._bpm.viaturas.dto.ViaturaDTO;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.viaturas.model.Viatura;
@@ -38,14 +39,15 @@ public class ViaturaController {
 
 
     @GetMapping("viatura/{id}")
-    public ResponseEntity<Viatura> getViaturaById(@PathVariable Long id, Authentication auth) {
+    public ResponseEntity<ViaturaByIdDTO> getViaturaById(@PathVariable Long id, Authentication auth) {
         User user = getAuthenticatedUser(auth);
         Viatura viatura = viaturaService.getViaturaById(id);
         if (!viatura.getBatalhao().getId().equals(user.getBatalhao().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(viatura);
+        return ResponseEntity.ok(viaturaService.getViaturaById2(id));
     }
+
 
 
 

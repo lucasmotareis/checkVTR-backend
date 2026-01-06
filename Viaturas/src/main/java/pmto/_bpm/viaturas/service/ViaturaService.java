@@ -1,5 +1,6 @@
 package pmto._bpm.viaturas.service;
 import org.springframework.beans.factory.annotation.Autowired;
+import pmto._bpm.viaturas.dto.ViaturaByIdDTO;
 import pmto._bpm.viaturas.dto.ViaturaDTO;
 
 import org.springframework.stereotype.Service;
@@ -70,5 +71,22 @@ public class ViaturaService {
     public Viatura getViaturaById(Long id) {
         return viaturaRepository.getById(id);
     }
+
+    public ViaturaByIdDTO getViaturaById2(Long id) {
+        Viatura v = viaturaRepository.findById(id)
+                .orElseThrow();
+
+        return new ViaturaByIdDTO(
+                v.getId(),
+                v.getPrefixo(),
+                v.getPlaca(),
+                v.getModelo(),
+                v.getKm_atual(),
+                v.getKm_revisao(),
+                v.isManutencao(),
+                v.getBatalhao()
+        );
+    }
+
 
 }
