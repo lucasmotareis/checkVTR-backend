@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class JwtService {
@@ -32,7 +33,7 @@ public class JwtService {
                 .setSubject(user.getMatricula())
                 .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 dia
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(60))) // 1 dia
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
