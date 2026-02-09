@@ -1,6 +1,6 @@
 package pmto._bpm.viaturas.auth.dto;
 
-import pmto._bpm.viaturas.auth.model.User;
+import pmto._bpm.viaturas.users.model.User;
 
 public class UserResponse {
     private String nomeGuerra;

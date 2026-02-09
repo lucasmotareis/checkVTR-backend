@@ -12,7 +12,7 @@ import pmto._bpm.viaturas.auth.dto.AuthResponse;
 import pmto._bpm.viaturas.auth.dto.LoginRequest;
 import pmto._bpm.viaturas.auth.dto.RegisterRequest;
 import pmto._bpm.viaturas.auth.dto.UserResponse;
-import pmto._bpm.viaturas.auth.model.User;
+import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.auth.service.AuthService;
 
 import java.time.Duration;

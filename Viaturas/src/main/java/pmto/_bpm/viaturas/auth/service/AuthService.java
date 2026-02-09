@@ -7,12 +7,12 @@ import pmto._bpm.viaturas.auth.dto.LoginRequest;
 import pmto._bpm.viaturas.auth.dto.RegisterRequest;
 import pmto._bpm.viaturas.auth.dto.UserResponse;
 import pmto._bpm.viaturas.auth.model.Role;
-import pmto._bpm.viaturas.auth.model.User;
+import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.auth.repository.CadastroAutorizadoRepository;
-import pmto._bpm.viaturas.auth.repository.UserRepository;
-import pmto._bpm.viaturas.exception.RegisterException;
-import pmto._bpm.viaturas.model.Batalhao;
-import pmto._bpm.viaturas.repository.BatalhaoRepository;
+import pmto._bpm.viaturas.users.repository.UserRepository;
+import pmto._bpm.viaturas.common.exception.RegisterException;
+import pmto._bpm.viaturas.batalhao.model.Batalhao;
+import pmto._bpm.viaturas.batalhao.repository.BatalhaoRepository;
 
 import java.util.Optional;
 

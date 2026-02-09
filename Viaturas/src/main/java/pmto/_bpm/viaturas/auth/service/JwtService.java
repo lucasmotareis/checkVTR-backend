@@ -2,7 +2,7 @@ package pmto._bpm.viaturas.auth.service;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import pmto._bpm.viaturas.auth.config.JwtProperties;
-import pmto._bpm.viaturas.auth.model.User;
+import pmto._bpm.viaturas.users.model.User;
 
 
 import io.jsonwebtoken.Jwts;

@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pmto._bpm.viaturas.auth.model.User;
+import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.auth.service.JwtService;
-import pmto._bpm.viaturas.auth.service.UserService;
+import pmto._bpm.viaturas.users.service.UserService;
 
 import java.io.IOException;
 
