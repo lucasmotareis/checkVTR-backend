@@ -53,6 +53,7 @@ public class AuthService {
         User user = new User();
         user.setMatricula( dto.getMatricula() );
         user.setCPF(dto.getCpf() );
+        user.setGraduacao( dto.getGraduacao() );
         user.setSenha(passwordEncoder.encode(dto.getSenha()));
         user.setNomeGuerra( dto.getNomeGuerra() );
         user.setRole(Role.valueOf("MOTORISTA"));

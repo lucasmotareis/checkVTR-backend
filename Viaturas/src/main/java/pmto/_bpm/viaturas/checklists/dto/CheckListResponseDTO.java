@@ -3,6 +3,7 @@ package pmto._bpm.viaturas.checklists.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class CheckListResponseDTO {
     private String nomeGuerra;
     private String matricula;
     private String prefixo;
-    private LocalDateTime data;
+    private Instant data;
 
     private List<String> imagens;
     private List<CheckListProblemaDTO> problemas;

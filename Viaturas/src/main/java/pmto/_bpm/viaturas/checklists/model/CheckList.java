@@ -1,4 +1,5 @@
 package pmto._bpm.viaturas.checklists.model;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -6,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.viaturas.model.Viatura;
 
@@ -20,7 +22,9 @@ public class CheckList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime data;
+
+    @CreationTimestamp
+    private Instant data;
 
 
     @ManyToOne
@@ -48,10 +52,9 @@ public class CheckList {
 
 
     public CheckList() {
-        this.data = LocalDateTime.now();
     }
 
-    public CheckList(Integer kmRevisao, User usuario, List<CheckListProblema> problemas, Integer kmAtual, List<String> imagens, Viatura viatura, Long id, LocalDateTime data) {
+    public CheckList(Integer kmRevisao, User usuario, List<CheckListProblema> problemas, Integer kmAtual, List<String> imagens, Viatura viatura, Long id) {
         this.kmRevisao = kmRevisao;
         this.usuario = usuario;
         this.problemas = problemas;
@@ -59,6 +62,5 @@ public class CheckList {
         this.imagens = imagens;
         this.viatura = viatura;
         this.id = id;
-        this.data = data;
     }
 }

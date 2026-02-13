@@ -46,8 +46,8 @@ public class CheckListService {
         checkList.setUsuario(user);
         if (dto.getKmAtual() != null && dto.getKmAtual() > 0) {
             checkList.setKmAtual(dto.getKmAtual());
-            viatura.setKm_atual(dto.getKmAtual());
-            viatura.setKm_revisao(dto.getKmRevisao());
+            viatura.setKmAtual(dto.getKmAtual());
+            viatura.setKmRevisao(dto.getKmRevisao());
             viaturaRepository.save(viatura);
         }
         checkList.setKmRevisao(dto.getKmRevisao());

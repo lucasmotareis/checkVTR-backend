@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.viaturas.users.model.User;
@@ -11,16 +12,23 @@ import pmto._bpm.viaturas.checklists.dto.CheckListDTO;
 import pmto._bpm.viaturas.checklists.dto.CheckListResponseDTO;
 import pmto._bpm.viaturas.checklists.model.CheckList;
 import pmto._bpm.viaturas.checklists.service.CheckListService;
+import pmto._bpm.viaturas.viaturas.service.ViaturaService;
+
+import java.time.Instant;
 
 @RestController
 @RequestMapping("/checklist")
 public class CheckListController {
 
     private final CheckListService checkListService;
+    private final ViaturaService viaturaService;
 
-    public CheckListController(CheckListService checkListService) {
+    public CheckListController(CheckListService checkListService, ViaturaService viaturaService) {
         this.checkListService = checkListService;
+        this.viaturaService = viaturaService;
     }
+
+
 
     private User getAuthenticatedUser(Authentication authentication) {
         return (User) authentication.getPrincipal();
@@ -48,7 +56,12 @@ public class CheckListController {
         return ResponseEntity.ok(result);
     }
 
-
+    @PostMapping("/viaturas/{id}/checklists/visto")
+    @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
+    public ResponseEntity<Void> marcarChecklistsComoVistos(@PathVariable Long id) {
+        viaturaService.marcarVisto(id, Instant.now());
+        return ResponseEntity.noContent().build();
+    }
 
 
     @GetMapping("/viaturas/{id}/checklists")

@@ -10,6 +10,9 @@ public class RegisterRequest {
     private String nomeGuerra;
 
     @NotBlank
+    private String graduacao;
+
+    @NotBlank
     private String senha;
 
     @NotBlank
@@ -21,6 +24,14 @@ public class RegisterRequest {
 
     @NotNull
     private Long batalhaoId;
+
+    public String getGraduacao() {
+        return graduacao;
+    }
+
+    public void setGraduacao(String graduacao) {
+        this.graduacao = graduacao;
+    }
 
     public Long getBatalhaoId() {
         return batalhaoId;

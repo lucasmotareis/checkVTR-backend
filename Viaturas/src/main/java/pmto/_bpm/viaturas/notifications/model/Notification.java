@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,25 +20,25 @@ public class Notification {
 
     private String titulo;
 
-    private String descricao;
+    private String mensagem;
 
     @ManyToOne
     @JoinColumn(name = "batalhao_id")
     private Batalhao batalhao;
 
     @CreationTimestamp
-    private LocalDateTime dataCriacao;
+    @Column(name = "data_criacao", nullable = false, updatable = false)
+    private Instant dataCriacao;
 
     // Construtor vazio
     public Notification() {
-        this.dataCriacao = LocalDateTime.now();
+
     }
 
     // Construtor completo (sem data, que será gerada automaticamente)
-    public Notification(Batalhao batalhao, String titulo, String descricao) {
+    public Notification(Batalhao batalhao, String titulo, String mensagem) {
         this.titulo = titulo;
-        this.descricao = descricao;
-        this.dataCriacao = LocalDateTime.now();
+        this.mensagem = mensagem;
         this.batalhao = batalhao;
     }
 

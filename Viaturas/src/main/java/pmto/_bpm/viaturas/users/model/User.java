@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,6 +19,11 @@ public class User implements UserDetails {
     private Long id;
 
     private String nomeGuerra;
+
+
+    private Instant ultimaNotificacaoVista;
+
+    private String graduacao;
 
     @ManyToOne
     @JoinColumn(name = "batalhao_id")
@@ -41,6 +47,22 @@ public class User implements UserDetails {
     private Role role;
 
     public User() {
+    }
+
+    public Instant getUltimaNotificacaoVista() {
+        return ultimaNotificacaoVista;
+    }
+
+    public void setUltimaNotificacaoVista(Instant ultimaNotificacaoVista) {
+        this.ultimaNotificacaoVista = ultimaNotificacaoVista;
+    }
+
+    public String getGraduacao() {
+        return graduacao;
+    }
+
+    public void setGraduacao(String graduacao) {
+        this.graduacao = graduacao;
     }
 
     public Long getId() {

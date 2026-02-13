@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
 
+import java.time.Instant;
+
 @Entity
 @Table(name="viatura")
 @Getter
@@ -18,9 +20,13 @@ public class Viatura {
     private String modelo;
     private String placa;
     private String prefixo;
-    private int km_atual;
-    private int km_revisao;
+    private int kmAtual;
+    private int kmRevisao;
     private boolean manutencao;
+
+    @Column(name = "chefe_checklist_visto_por_ultimo")
+    private Instant chefeChecklistVistoPorUltimo;
+
 
     @ManyToOne
     @JoinColumn(name = "batalhao_id")
@@ -31,9 +37,9 @@ public class Viatura {
     public Viatura() {
     }
 
-    public Viatura(Batalhao batalhao,Boolean manutencao, int km_revisao, int km_atual, String prefixo, String placa, String modelo, Long id) {
-        this.km_revisao = km_revisao;
-        this.km_atual = km_atual;
+    public Viatura(Batalhao batalhao, Boolean manutencao, int kmRevisao, int kmAtual, String prefixo, String placa, String modelo, Long id) {
+        this.kmRevisao = kmRevisao;
+        this.kmAtual = kmAtual;
         this.prefixo = prefixo;
         this.placa = placa;
         this.modelo = modelo;

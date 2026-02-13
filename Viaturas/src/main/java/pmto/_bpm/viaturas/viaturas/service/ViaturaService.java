@@ -1,6 +1,8 @@
 package pmto._bpm.viaturas.viaturas.service;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaByIdDTO;
+import pmto._bpm.viaturas.viaturas.dto.ViaturaComBadgeDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaDTO;
 
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import pmto._bpm.viaturas.batalhao.repository.BatalhaoRepository;
 import pmto._bpm.viaturas.viaturas.repository.ViaturaRepository;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.time.Instant;
 import java.util.List;
 
 
@@ -35,8 +38,8 @@ public class ViaturaService {
         viatura.setPrefixo(dto.getPrefixo());
         viatura.setModelo(dto.getModelo());
         viatura.setManutencao(dto.isManutencao());
-        viatura.setKm_atual(dto.getKmAtual());
-        viatura.setKm_revisao(dto.getKmRevisao());
+        viatura.setKmAtual(dto.getKmAtual());
+        viatura.setKmRevisao(dto.getKmRevisao());
         viatura.setBatalhao(batalhao);
         return viaturaRepository.save(viatura);
     }
@@ -56,12 +59,23 @@ public class ViaturaService {
 
         existente.setPlaca(dto.getPlaca());
         existente.setPrefixo(dto.getPrefixo());
-        existente.setKm_atual(dto.getKmAtual());
+        existente.setKmAtual(dto.getKmAtual());
         existente.setManutencao(dto.isManutencao());
         existente.setModelo(dto.getModelo());
-        existente.setKm_revisao(dto.getKmRevisao());
+        existente.setKmRevisao(dto.getKmRevisao());
 
         return viaturaRepository.save(existente);
+    }
+
+    @Transactional
+    public void marcarVisto(Long viaturaId, Instant now) {
+        Viatura v = viaturaRepository.findById(viaturaId)
+                .orElseThrow(() -> new RuntimeException("Viatura não encontrada"));
+        v.setChefeChecklistVistoPorUltimo(now);
+    }
+
+    public List<ViaturaComBadgeDTO> listarComBadges(Long batalhaoId) {
+        return viaturaRepository.findViaturasComBadge(batalhaoId, Instant.EPOCH);
     }
 
     public List<Viatura> getByBatalhao(Long batalhaoId) {
@@ -81,8 +95,8 @@ public class ViaturaService {
                 v.getPrefixo(),
                 v.getPlaca(),
                 v.getModelo(),
-                v.getKm_atual(),
-                v.getKm_revisao(),
+                v.getKmAtual(),
+                v.getKmRevisao(),
                 v.isManutencao(),
                 v.getBatalhao()
         );

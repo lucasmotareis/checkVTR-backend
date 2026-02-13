@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaByIdDTO;
+import pmto._bpm.viaturas.viaturas.dto.ViaturaComBadgeDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaDTO;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.viaturas.viaturas.model.Viatura;
@@ -32,6 +33,13 @@ public class ViaturaController {
         User user = getAuthenticatedUser(auth);
         List<Viatura> viaturas = viaturaService.getByBatalhao(user.getBatalhao().getId());
         return ResponseEntity.ok(viaturas);
+    }
+
+
+    @GetMapping("viaturasBadge")
+    public ResponseEntity<List<ViaturaComBadgeDTO>> getAllViaturasBadge(Authentication auth) {
+        User user = getAuthenticatedUser(auth);
+        return ResponseEntity.ok(viaturaService.listarComBadges(user.getBatalhao().getId()));
     }
 
 
