@@ -33,12 +33,18 @@ public class AnalyticsService {
         );
     }
 
-    public CheckListsNaoVistos checklistsNaoVistos(Long batalhaoId) {
-        return analyticsRepository.checklistsNaoVistos(batalhaoId);
-    }
+    public DashboardDTO  dashBoardInicial (Long batalhaoId) {
+        long totalViaturas = analyticsRepository.totalViaturas(batalhaoId);
+        long emManutencao = analyticsRepository.viaturasEmManutencao(batalhaoId);
+        long naoVistos = analyticsRepository.checklistsNaoVistos(batalhaoId);
+        long disponiveis = Math.max(0, totalViaturas - emManutencao);
 
-    public CountDTO viaturasEmManutencao(Long batalhaoId) {
-        return analyticsRepository.viaturasEmManutencao(batalhaoId);
+
+        return new DashboardDTO(
+                emManutencao,
+                disponiveis,
+                naoVistos
+        );
     }
 
     public List<ChecklistsPorMesDTO> checklistsUltimos5Meses(Long batalhaoId) {

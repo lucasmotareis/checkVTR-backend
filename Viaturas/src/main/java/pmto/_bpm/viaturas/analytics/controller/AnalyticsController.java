@@ -59,17 +59,13 @@ public class AnalyticsController {
         );
     }
 
-    @GetMapping("/checklists-nao-vistos")
-    public CheckListsNaoVistos checklistsNaoVistos(Authentication auth) {
+    @GetMapping("/dashboard")
+    public DashboardDTO dashboard(Authentication auth) {
         User user = getAuthenticatedUser(auth);
-        return analyticsService.checklistsNaoVistos(user.getBatalhao().getId());
+        return analyticsService.dashBoardInicial(user.getBatalhao().getId());
     }
 
-    @GetMapping("/viaturas-em-manutencao")
-    public CountDTO viaturasEmManutencao(Authentication auth) {
-        User user = getAuthenticatedUser(auth);
-        return analyticsService.viaturasEmManutencao(user.getBatalhao().getId());
-    }
+
 
     @GetMapping("/checklists-mensais")
     public List<ChecklistsPorMesDTO> checklistsUltimos5Meses(Authentication auth) {
