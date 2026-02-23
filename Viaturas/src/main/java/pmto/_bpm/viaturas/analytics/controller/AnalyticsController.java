@@ -6,14 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pmto._bpm.viaturas.analytics.dto.CountDTO;
+import pmto._bpm.viaturas.analytics.dto.ChecklistsPorMesDTO;
 import pmto._bpm.viaturas.analytics.dto.Periodo;
 import pmto._bpm.viaturas.analytics.dto.TopItemDTO;
 import pmto._bpm.viaturas.analytics.dto.ViaturaCountDTO;
 import pmto._bpm.viaturas.analytics.service.AnalyticsService;
 import pmto._bpm.viaturas.users.model.User;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
@@ -64,16 +63,9 @@ public class AnalyticsController {
     }
 
 
-    @GetMapping("/total-problemas")
-    public CountDTO totalProblemas(
-            Authentication auth,
-            @RequestParam(required = false) Instant inicio,
-            @RequestParam(required = false) Instant fim
-    ) {
+    @GetMapping("/checklists-mensais")
+    public List<ChecklistsPorMesDTO> checklistsUltimos5Meses(Authentication auth) {
         User user = getAuthenticatedUser(auth);
-        Periodo periodo = Periodo.of(inicio, fim);
-
-        return analyticsService.totalProblemas(user.getBatalhao().getId(), periodo.inicio(), periodo.fim());
+        return analyticsService.checklistsUltimos5Meses(user.getBatalhao().getId());
     }
-
 }

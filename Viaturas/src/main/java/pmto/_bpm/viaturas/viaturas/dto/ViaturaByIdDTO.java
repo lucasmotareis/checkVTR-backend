@@ -7,8 +7,8 @@ public record ViaturaByIdDTO(
         String prefixo,
         String placa,
         String modelo,
-        int km_atual,
-        int km_revisao,
+        int kmAtual,
+        int kmRevisao,
         boolean manutencao,
         Batalhao batalhao
 

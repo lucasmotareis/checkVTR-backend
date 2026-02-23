@@ -16,7 +16,7 @@ public class CacheConfig {
     public CacheManager cacheManager() {
         CaffeineCacheManager manager = new CaffeineCacheManager("ultimosChecklists", "viaturasPorStatus", "ranking");
         manager.setCaffeine(Caffeine.newBuilder()
-                .expireAfterWrite(12, TimeUnit.HOURS)  // atualiza a cada 40 min
+                .expireAfterWrite(24, TimeUnit.HOURS)  // atualiza a cada 40 min
                 .maximumSize(1000));
         return manager;
     }

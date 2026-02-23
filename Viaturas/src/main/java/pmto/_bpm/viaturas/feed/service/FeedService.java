@@ -1,10 +1,10 @@
-package pmto._bpm.viaturas.auth.service;
+package pmto._bpm.viaturas.feed.service;
 
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
-import pmto._bpm.viaturas.auth.dto.FeedDTO;
+import pmto._bpm.viaturas.feed.dto.FeedDTO;
 
 import java.util.ArrayList;
 import java.util.List;

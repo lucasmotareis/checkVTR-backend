@@ -8,5 +8,6 @@ public record NotificacaoItemDTO(
         String titulo,
         String mensagem,
         OffsetDateTime dataCriacao,
+        String nomeBatalhao,
         boolean lida
 ) {}

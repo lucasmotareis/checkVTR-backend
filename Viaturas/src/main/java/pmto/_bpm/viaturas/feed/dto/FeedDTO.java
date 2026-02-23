@@ -1,6 +1,4 @@
-package pmto._bpm.viaturas.auth.dto;
-
-import java.time.LocalDateTime;
+package pmto._bpm.viaturas.feed.dto;
 
 public class FeedDTO {
 

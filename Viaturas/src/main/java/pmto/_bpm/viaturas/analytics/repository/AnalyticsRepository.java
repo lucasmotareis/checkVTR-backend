@@ -56,16 +56,19 @@ public interface AnalyticsRepository extends Repository<CheckListProblema, Long>
     );
 
 
-    @Query("""
-        select count(cp.id)
-        from CheckListProblema cp
-        join cp.checklist c
-        join c.viatura v
-        where v.batalhao.id = :batalhaoId
-          and (c.data >= :inicio)
-          and (c.data <= :fim)
-    """)
-    long totalProblemas(
+    @Query(value = """
+    select extract(year from c.data) as ano,
+           extract(month from c.data) as mes,
+           count(*) as total
+    from checklist c
+    join viatura v on v.id = c.viatura_id
+    where v.batalhao_id = :batalhaoId
+      and c.data >= :inicio
+      and c.data < :fim
+    group by extract(year from c.data), extract(month from c.data)
+    order by extract(year from c.data), extract(month from c.data)
+""", nativeQuery = true)
+    List<Object[]> checklistsPorAnoMesRaw(
             @Param("batalhaoId") Long batalhaoId,
             @Param("inicio") Instant inicio,
             @Param("fim") Instant fim

@@ -13,16 +13,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.viaturas.notifications.dto.NaoLidasDTO;
 import pmto._bpm.viaturas.notifications.dto.NotificacaoItemDTO;
+import pmto._bpm.viaturas.notifications.dto.NotificacaoStatsDTO;
 import pmto._bpm.viaturas.notifications.repository.NotificationRepository;
 import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.users.repository.UserRepository;
-import pmto._bpm.viaturas.notifications.dto.NotificationDTO;
+import pmto._bpm.viaturas.notifications.dto.CreateNotificationDTO;
 import pmto._bpm.viaturas.notifications.model.Notification;
 import pmto._bpm.viaturas.notifications.service.NotificationService;
 
 import java.time.Instant;
-import java.time.ZoneId;
-import java.util.List;
+
 @RestController
 @RequestMapping("/notifications")
 class NotificationController {
@@ -44,7 +44,7 @@ class NotificationController {
 
     @PostMapping
     @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
-    public ResponseEntity<Notification> criar(@RequestBody @Valid NotificationDTO dto, Authentication auth) {
+    public ResponseEntity<Notification> criar(@RequestBody @Valid CreateNotificationDTO dto, Authentication auth) {
         User user = getAuthenticatedUser(auth);
         dto.setBatalhaoId(user.getBatalhao().getId());
         Notification nova = notificationService.criar(dto);
@@ -56,6 +56,13 @@ class NotificationController {
         User user = getAuthenticatedUser(auth);
         return new NaoLidasDTO(notificationService.notificacoesNaoLidas(user));
     }
+
+    @GetMapping("/stats")
+    public NotificacaoStatsDTO stats(Authentication auth) {
+        User user = getAuthenticatedUser(auth);
+        return notificationService.getStats(user.getBatalhao().getId());
+    }
+
 
     @GetMapping
     public ResponseEntity<Page<NotificacaoItemDTO>> listar(
@@ -85,7 +92,7 @@ class NotificationController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
-    public ResponseEntity<?> atualizar( @PathVariable Long id,@RequestBody @Valid NotificationDTO dto, Authentication auth) {
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid CreateNotificationDTO dto, Authentication auth) {
         try {
             User user = getAuthenticatedUser(auth);
             Notification notification = notificationService.getNotificationById(id);

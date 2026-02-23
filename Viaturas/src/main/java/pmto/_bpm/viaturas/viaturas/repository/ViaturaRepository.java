@@ -16,7 +16,7 @@ public interface ViaturaRepository extends JpaRepository<Viatura,Long> {
 
     @Query("""
     select new pmto._bpm.viaturas.viaturas.dto.ViaturaComBadgeDTO(
-        v.id, v.prefixo, v.modelo, v.placa,v.manutencao,
+        v.id, v.prefixo, v.modelo, v.placa,v.manutencao, v.kmAtual,v.kmRevisao,
         count(c.id)
     )
     from Viatura v
@@ -24,7 +24,7 @@ public interface ViaturaRepository extends JpaRepository<Viatura,Long> {
         on c.viatura.id = v.id
        and c.data > coalesce(v.chefeChecklistVistoPorUltimo, :epoch)
     where v.batalhao.id = :batalhaoId
-    group by v.id, v.prefixo, v.modelo, v.placa, v.manutencao
+    group by v.id, v.prefixo, v.modelo, v.placa, v.manutencao,v.kmAtual,v.kmRevisao
     order by v.prefixo asc
     """)
     List<ViaturaComBadgeDTO> findViaturasComBadge(

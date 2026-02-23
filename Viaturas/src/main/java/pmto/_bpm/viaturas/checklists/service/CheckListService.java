@@ -1,9 +1,9 @@
 package pmto._bpm.viaturas.checklists.service;
 
 import org.springframework.stereotype.Service;
-import pmto._bpm.viaturas.auth.dto.FeedDTO;
+import pmto._bpm.viaturas.feed.dto.FeedDTO;
 import pmto._bpm.viaturas.users.model.User;
-import pmto._bpm.viaturas.auth.service.FeedService;
+import pmto._bpm.viaturas.feed.service.FeedService;
 import pmto._bpm.viaturas.checklists.dto.CheckListResponseDTO;
 import pmto._bpm.viaturas.checklists.dto.CheckListDTO;
 import pmto._bpm.viaturas.checklists.dto.CheckListProblemaDTO;

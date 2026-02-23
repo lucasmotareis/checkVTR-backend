@@ -1,12 +1,12 @@
-package pmto._bpm.viaturas.feed;
+package pmto._bpm.viaturas.feed.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pmto._bpm.viaturas.auth.dto.FeedDTO;
+import pmto._bpm.viaturas.feed.dto.FeedDTO;
 import pmto._bpm.viaturas.users.model.User;
-import pmto._bpm.viaturas.auth.service.FeedService;
+import pmto._bpm.viaturas.feed.service.FeedService;
 
 import java.util.List;
 
