@@ -24,8 +24,6 @@ public class Viatura {
     private int kmRevisao;
     private boolean manutencao;
 
-    @Column(name = "chefe_checklist_visto_por_ultimo")
-    private Instant chefeChecklistVistoPorUltimo;
 
 
     @ManyToOne
