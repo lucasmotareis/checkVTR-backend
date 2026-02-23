@@ -22,14 +22,13 @@ public interface ViaturaRepository extends JpaRepository<Viatura,Long> {
     from Viatura v
     left join CheckList c
         on c.viatura.id = v.id
-       and c.data > coalesce(v.chefeChecklistVistoPorUltimo, :epoch)
+       and c.vistoPeloChefe = false
     where v.batalhao.id = :batalhaoId
     group by v.id, v.prefixo, v.modelo, v.placa, v.manutencao,v.kmAtual,v.kmRevisao
     order by v.prefixo asc
     """)
     List<ViaturaComBadgeDTO> findViaturasComBadge(
-            @Param("batalhaoId") Long batalhaoId,
-            @Param("epoch") Instant epoch
+            @Param("batalhaoId") Long batalhaoId
     );
 
 }

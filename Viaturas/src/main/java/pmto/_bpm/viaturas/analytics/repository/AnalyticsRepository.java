@@ -3,6 +3,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+import pmto._bpm.viaturas.analytics.dto.CheckListsNaoVistos;
+import pmto._bpm.viaturas.analytics.dto.CountDTO;
 import pmto._bpm.viaturas.analytics.dto.TopItemDTO;
 import pmto._bpm.viaturas.analytics.dto.ViaturaCountDTO;
 import pmto._bpm.viaturas.checklists.model.CheckListProblema;
@@ -32,6 +34,23 @@ public interface AnalyticsRepository extends Repository<CheckListProblema, Long>
             @Param("fim") Instant fim,
             Pageable pageable
     );
+
+    @Query("""
+    select new pmto._bpm.viaturas.analytics.dto.CheckListsNaoVistos(count(c.id))
+    from CheckList c
+    join c.viatura v
+    where c.vistoPeloChefe = false
+      and v.batalhao.id = :batalhaoId
+""")
+    CheckListsNaoVistos checklistsNaoVistos(@Param("batalhaoId") Long batalhaoId);
+
+    @Query("""
+    select new pmto._bpm.viaturas.analytics.dto.CheckListsNaoVistos(count(v.id))
+    from Viatura v
+    where v.manutencao = true
+      and v.batalhao.id = :batalhaoId
+""")
+    CountDTO viaturasEmManutencao(@Param("batalhaoId") Long batalhaoId);
 
     @Query("""
         select new pmto._bpm.viaturas.analytics.dto.ViaturaCountDTO(

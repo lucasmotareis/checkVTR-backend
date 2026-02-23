@@ -1,5 +1,6 @@
 package pmto._bpm.viaturas.checklists.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pmto._bpm.viaturas.feed.dto.FeedDTO;
 import pmto._bpm.viaturas.users.model.User;
@@ -17,6 +18,7 @@ import pmto._bpm.viaturas.viaturas.repository.ViaturaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -86,6 +88,8 @@ public class CheckListService {
         dto.setNomeGuerra(checkList.getUsuario().getNomeGuerra());
         dto.setMatricula(checkList.getUsuario().getMatricula());
         dto.setImagens(checkList.getImagens());
+        dto.setVistoPeloChefe(checkList.isVistoPeloChefe());
+        dto.setVistoPeloChefeEm(checkList.getVistoPeloChefeEm());
 
         List<CheckListProblemaDTO> problemasDTO = checkList.getProblemas().stream().map(p -> {
             CheckListProblemaDTO dtoP = new CheckListProblemaDTO();
@@ -110,7 +114,18 @@ public class CheckListService {
         Page<CheckList> page = checkListRepository.findByViaturaId(id, pageable);
 
         return page.map(this::toDTO); // Mapeia cada entidade para DTO
-
     }
+
+    @Transactional
+    public void marcarVistoPeloChefe(Long checklistId) {
+        CheckList c = checkListRepository.findById(checklistId)
+                .orElseThrow(() -> new RuntimeException("Checklist não encontrado"));
+
+        if (!c.isVistoPeloChefe()) {
+            c.setVistoPeloChefe(true);
+            c.setVistoPeloChefeEm(Instant.now());
+        }
+    }
+
 
 }

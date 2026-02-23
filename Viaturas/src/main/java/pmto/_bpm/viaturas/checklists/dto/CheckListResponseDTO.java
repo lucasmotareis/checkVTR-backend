@@ -17,6 +17,8 @@ public class CheckListResponseDTO {
     private String matricula;
     private String prefixo;
     private Instant data;
+    private boolean vistoPeloChefe;
+    private Instant vistoPeloChefeEm;
 
     private List<String> imagens;
     private List<CheckListProblemaDTO> problemas;

@@ -26,6 +26,10 @@ public class CheckList {
     @CreationTimestamp
     private Instant data;
 
+    @Column(nullable = false)
+    private boolean vistoPeloChefe = false;
+
+    private Instant vistoPeloChefeEm;
 
     @ManyToOne
     @JoinColumn(name = "viatura_id")

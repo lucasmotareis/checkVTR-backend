@@ -2,9 +2,7 @@ package pmto._bpm.viaturas.analytics.service;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import pmto._bpm.viaturas.analytics.dto.ChecklistsPorMesDTO;
-import pmto._bpm.viaturas.analytics.dto.TopItemDTO;
-import pmto._bpm.viaturas.analytics.dto.ViaturaCountDTO;
+import pmto._bpm.viaturas.analytics.dto.*;
 import pmto._bpm.viaturas.analytics.repository.AnalyticsRepository;
 
 import java.time.Instant;
@@ -33,6 +31,14 @@ public class AnalyticsService {
                 batalhaoId, inicio, fim,
                 PageRequest.of(0, Math.min(limit, 50))
         );
+    }
+
+    public CheckListsNaoVistos checklistsNaoVistos(Long batalhaoId) {
+        return analyticsRepository.checklistsNaoVistos(batalhaoId);
+    }
+
+    public CountDTO viaturasEmManutencao(Long batalhaoId) {
+        return analyticsRepository.viaturasEmManutencao(batalhaoId);
     }
 
     public List<ChecklistsPorMesDTO> checklistsUltimos5Meses(Long batalhaoId) {

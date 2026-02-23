@@ -56,10 +56,13 @@ public class CheckListController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/viaturas/{id}/visto")
+
+    @PostMapping("/{checklistId}/visto")
     @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
-    public ResponseEntity<Void> marcarChecklistsComoVistos(@PathVariable Long id) {
-        viaturaService.marcarVisto(id, Instant.now());
+    public ResponseEntity<Void> marcarChecklistVisto(
+            @PathVariable Long checklistId
+    ) {
+        checkListService.marcarVistoPeloChefe(checklistId);
         return ResponseEntity.noContent().build();
     }
 

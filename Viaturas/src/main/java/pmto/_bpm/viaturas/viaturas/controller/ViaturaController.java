@@ -29,6 +29,13 @@ public class ViaturaController {
     }
 
     @GetMapping("viaturas")
+    public ResponseEntity<List<?>> getAllViaturas(Authentication auth) {
+        User user = getAuthenticatedUser(auth);
+        return ResponseEntity.ok(viaturaService.listarViaturas(user.getBatalhao().getId()));
+    }
+
+
+    @GetMapping("viaturas-com-badge")
     public ResponseEntity<List<ViaturaComBadgeDTO>> getAllViaturasBadge(Authentication auth) {
         User user = getAuthenticatedUser(auth);
         return ResponseEntity.ok(viaturaService.listarComBadges(user.getBatalhao().getId()));

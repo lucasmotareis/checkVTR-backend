@@ -67,15 +67,13 @@ public class ViaturaService {
         return viaturaRepository.save(existente);
     }
 
-    @Transactional
-    public void marcarVisto(Long viaturaId, Instant now) {
-        Viatura v = viaturaRepository.findById(viaturaId)
-                .orElseThrow(() -> new RuntimeException("Viatura não encontrada"));
-        v.setChefeChecklistVistoPorUltimo(now);
+    public List<Viatura> listarViaturas(Long batalhaoId) {
+        return viaturaRepository.findByBatalhaoId(batalhaoId);
     }
 
+
     public List<ViaturaComBadgeDTO> listarComBadges(Long batalhaoId) {
-        return viaturaRepository.findViaturasComBadge(batalhaoId, Instant.EPOCH);
+        return viaturaRepository.findViaturasComBadge(batalhaoId);
     }
 
     public List<Viatura> getByBatalhao(Long batalhaoId) {
