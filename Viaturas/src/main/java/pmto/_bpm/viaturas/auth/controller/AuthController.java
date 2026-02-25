@@ -36,18 +36,15 @@ public class AuthController {
 
         AuthResponse token = authService.login(dto);
 
-        if (!"CHEFE_TRANSPORTE".equals(token.getUser().getRole()) && "web".equalsIgnoreCase(clientType)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso restrito a chefes de transporte.");
-        }
-
 
         if ("web".equalsIgnoreCase(clientType)) {
+            boolean isProd = true;
             ResponseCookie cookie = ResponseCookie.from("token", token.getToken())
                     .httpOnly(true)
-                    .secure(true) // use true em produção com HTTPS
+                    .secure(isProd) // use true em produção com HTTPS
                     .path("/")
                     .maxAge(Duration.ofHours(1))
-                    .sameSite("None")
+                    .sameSite(isProd ? "None" : "Lax")
                     .build();
 
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

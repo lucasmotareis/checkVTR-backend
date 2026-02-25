@@ -15,8 +15,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://localhost:5173", "https://api.pmto8bpm.com.br", "https://localhost:3000/login", "https://localhost:3000, https://frota.pmto8bpm.com.br, http://10.0.2.2:3000 ")); // ou usar AllowedOriginPatterns
-
+        config.setAllowedOrigins(List.of("https://localhost:5173", "https://api.pmto8bpm.com.br", "https://localhost:3000/login", "https://localhost:3000, https://frota.pmto8bpm.com.br, http://10.0.2.2:3000, http://localhost:8081, https://192.168.10.101:8081, https://checkvtr--e0451kb20w.expo.app")); // ou usar AllowedOriginPatterns
         config.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept", "Authorization",  "X-Client-Type", "Access-Control-Allow-Credentials"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
