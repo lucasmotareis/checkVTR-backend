@@ -24,7 +24,7 @@ public class CorsConfig {
                 "http://localhost:8081",
                 "http://192.168.10.101:8081",
                 "https://frota.pmto8bpm.com.br",
-                "https://checkvtr--e0451kb20w.expo.app"));
+                "https://web.pmto8bpm.com.br"));
 
         config.setAllowedHeaders(List.of("*"));
 
