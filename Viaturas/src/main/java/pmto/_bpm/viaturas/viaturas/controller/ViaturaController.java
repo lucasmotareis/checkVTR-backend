@@ -44,7 +44,7 @@ public class ViaturaController {
     @GetMapping("viatura/{id}")
     public ResponseEntity<ViaturaByIdDTO> getViaturaById(@PathVariable Long id, Authentication auth) {
         User user = getAuthenticatedUser(auth);
-        Viatura viatura = viaturaService.getViaturaById(id);
+        var viatura = viaturaService.getViaturaById(id);
         if (!viatura.getBatalhao().getId().equals(user.getBatalhao().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -81,7 +81,7 @@ public class ViaturaController {
     @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
     public ResponseEntity<?> deleteViatura(@PathVariable Long id, Authentication auth) {
         User user = getAuthenticatedUser(auth);
-        Viatura viatura = viaturaService.getViaturaById(id);
+        var viatura = viaturaService.getViaturaById(id);
 
         if (!viatura.getBatalhao().getId().equals(user.getBatalhao().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode deletar viaturas de outro batalhão.");
