@@ -1,9 +1,8 @@
-package pmto._bpm.viaturas.storage.dto;
+package pmto._bpm.viaturas.storage.s3;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.viaturas.checklists.dto.ChecklistUploadRequestDTO;
-import pmto._bpm.viaturas.storage.s3.AwsS3Service;
 
 import java.util.List;
 
