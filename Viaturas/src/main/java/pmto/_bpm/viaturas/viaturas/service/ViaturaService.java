@@ -71,6 +71,13 @@ public class ViaturaService {
         return viaturaRepository.findByBatalhaoId(batalhaoId);
     }
 
+    public List<ViaturaByIdDTO> listarViaturasDTO(Long batalhaoId) {
+        return viaturaRepository.findByBatalhaoId(batalhaoId)
+                .stream()
+                .map(this::toByIdDTO)
+                .toList();
+    }
+
 
     public List<ViaturaComBadgeDTO> listarComBadges(Long batalhaoId) {
         return viaturaRepository.findViaturasComBadge(batalhaoId);
@@ -88,6 +95,10 @@ public class ViaturaService {
         Viatura v = viaturaRepository.findById(id)
                 .orElseThrow();
 
+        return toByIdDTO(v);
+    }
+
+    public ViaturaByIdDTO toByIdDTO(Viatura v) {
         return new ViaturaByIdDTO(
                 v.getId(),
                 v.getPrefixo(),
@@ -96,7 +107,8 @@ public class ViaturaService {
                 v.getKmAtual(),
                 v.getKmRevisao(),
                 v.isManutencao(),
-                v.getBatalhao()
+                v.getBatalhao().getId(),
+                v.getBatalhao().getNome()
         );
     }
 

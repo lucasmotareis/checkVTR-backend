@@ -1,7 +1,5 @@
 package pmto._bpm.viaturas.viaturas.dto;
 
-import pmto._bpm.viaturas.batalhao.model.Batalhao;
-
 public record ViaturaByIdDTO(
         Long id,
         String prefixo,
@@ -10,7 +8,8 @@ public record ViaturaByIdDTO(
         int kmAtual,
         int kmRevisao,
         boolean manutencao,
-        Batalhao batalhao
+        Long batalhaoId,
+        String batalhaoNome
 
 ) {}
 

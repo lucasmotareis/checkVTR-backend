@@ -10,7 +10,6 @@ import pmto._bpm.viaturas.viaturas.dto.ViaturaByIdDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaComBadgeDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaDTO;
 import org.springframework.web.bind.annotation.*;
-import pmto._bpm.viaturas.viaturas.model.Viatura;
 import pmto._bpm.viaturas.viaturas.service.ViaturaService;
 
 import java.util.List;
@@ -29,9 +28,9 @@ public class ViaturaController {
     }
 
     @GetMapping("viaturas")
-    public ResponseEntity<List<?>> getAllViaturas(Authentication auth) {
+    public ResponseEntity<List<ViaturaByIdDTO>> getAllViaturas(Authentication auth) {
         User user = getAuthenticatedUser(auth);
-        return ResponseEntity.ok(viaturaService.listarViaturas(user.getBatalhao().getId()));
+        return ResponseEntity.ok(viaturaService.listarViaturasDTO(user.getBatalhao().getId()));
     }
 
 
@@ -56,26 +55,24 @@ public class ViaturaController {
 
     @PostMapping("viatura")
     @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
-    public ResponseEntity<Viatura> createViatura(@RequestBody @Valid ViaturaDTO dto, Authentication auth) {
+    public ResponseEntity<ViaturaByIdDTO> createViatura(@RequestBody @Valid ViaturaDTO dto, Authentication auth) {
         User user = getAuthenticatedUser(auth);
         dto.setBatalhaoId(user.getBatalhao().getId()); // força a viatura ser do batalhão do user
-        Viatura nova = viaturaService.save(dto);
-        return ResponseEntity.ok(nova);
+        return ResponseEntity.ok(viaturaService.toByIdDTO(viaturaService.save(dto)));
     }
 
     @PutMapping("viatura/{id}")
     @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
     public ResponseEntity<?> atualizarViatura(@PathVariable Long id, @RequestBody @Valid ViaturaDTO dto, Authentication auth) {
         User user = getAuthenticatedUser(auth);
-        Viatura viatura = viaturaService.getViaturaById(id);
+        var viatura = viaturaService.getViaturaById(id);
 
         if (!viatura.getBatalhao().getId().equals(user.getBatalhao().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode alterar viaturas de outro batalhão.");
         }
 
 
-        Viatura atualizada = viaturaService.atualizar(id, dto);
-        return ResponseEntity.ok(atualizada);
+        return ResponseEntity.ok(viaturaService.toByIdDTO(viaturaService.atualizar(id, dto)));
     }
 
 

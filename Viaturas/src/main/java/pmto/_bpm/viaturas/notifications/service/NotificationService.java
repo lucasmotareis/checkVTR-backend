@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
 import pmto._bpm.viaturas.notifications.dto.NotificacaoItemDTO;
 import pmto._bpm.viaturas.notifications.dto.NotificacaoStatsDTO;
+import pmto._bpm.viaturas.notifications.dto.NotificationResponseDTO;
 import pmto._bpm.viaturas.notifications.model.Notification;
 import pmto._bpm.viaturas.notifications.dto.CreateNotificationDTO;
 import pmto._bpm.viaturas.batalhao.repository.BatalhaoRepository;
@@ -61,6 +62,18 @@ public class NotificationService {
 
     public Notification getNotificationById(Long id) {
         return notificationRepository.getReferenceById(id);
+    }
+
+    public NotificationResponseDTO toResponseDTO(Notification n) {
+        ZoneId zone = ZoneId.of("America/Araguaina");
+        return new NotificationResponseDTO(
+                n.getId(),
+                n.getTitulo(),
+                n.getMensagem(),
+                n.getDataCriacao().atZone(zone).toOffsetDateTime(),
+                n.getBatalhao().getId(),
+                n.getBatalhao().getNome()
+        );
     }
 
 

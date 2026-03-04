@@ -7,14 +7,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pmto._bpm.viaturas.notifications.dto.NaoLidasDTO;
 import pmto._bpm.viaturas.notifications.dto.NotificacaoItemDTO;
 import pmto._bpm.viaturas.notifications.dto.NotificacaoStatsDTO;
-import pmto._bpm.viaturas.notifications.repository.NotificationRepository;
+import pmto._bpm.viaturas.notifications.dto.NotificationResponseDTO;
 import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.users.repository.UserRepository;
 import pmto._bpm.viaturas.notifications.dto.CreateNotificationDTO;
@@ -28,14 +27,10 @@ import java.time.Instant;
 class NotificationController {
     private final NotificationService notificationService;
     private final UserRepository userRepository;
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final NotificationRepository notificationRepository;
 
-    NotificationController(UserRepository userRepository, NotificationService notificationService, NamedParameterJdbcTemplate namedParameterJdbcTemplate, NotificationRepository notificationRepository) {
+    NotificationController(UserRepository userRepository, NotificationService notificationService) {
         this.notificationService = notificationService;
         this.userRepository = userRepository;
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.notificationRepository = notificationRepository;
     }
 
     private User getAuthenticatedUser(Authentication authentication) {
@@ -44,11 +39,11 @@ class NotificationController {
 
     @PostMapping
     @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
-    public ResponseEntity<Notification> criar(@RequestBody @Valid CreateNotificationDTO dto, Authentication auth) {
+    public ResponseEntity<NotificationResponseDTO> criar(@RequestBody @Valid CreateNotificationDTO dto, Authentication auth) {
         User user = getAuthenticatedUser(auth);
         dto.setBatalhaoId(user.getBatalhao().getId());
         Notification nova = notificationService.criar(dto);
-        return ResponseEntity.ok(nova);
+        return ResponseEntity.ok(notificationService.toResponseDTO(nova));
     }
 
     @GetMapping("/unread-count")
@@ -79,13 +74,13 @@ class NotificationController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Notification> getNotificacaoById(@PathVariable Long id, Authentication auth) {
+    public ResponseEntity<NotificationResponseDTO> getNotificacaoById(@PathVariable Long id, Authentication auth) {
         User user = getAuthenticatedUser(auth);
         Notification notification = notificationService.getNotificationById(id);
         if (!notification.getBatalhao().getId().equals(user.getBatalhao().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(notification);
+        return ResponseEntity.ok(notificationService.toResponseDTO(notification));
     }
 
 
@@ -100,8 +95,7 @@ class NotificationController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não pode alterar notificações de outro batalhão.");
             }
             Notification atualizada = notificationService.atualizar(id, dto);
-
-            return ResponseEntity.ok(atualizada);
+            return ResponseEntity.ok(notificationService.toResponseDTO(atualizada));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
