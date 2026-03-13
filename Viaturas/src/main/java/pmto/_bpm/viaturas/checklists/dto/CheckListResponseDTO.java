@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -21,7 +20,7 @@ public class CheckListResponseDTO {
     private Instant vistoPeloChefeEm;
 
     private List<String> imagens;
-    private List<CheckListProblemaDTO> problemas;
+    private List<CheckListProblemaResponseDTO> problemas;
 
 }
 

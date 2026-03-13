@@ -10,6 +10,7 @@ import pmto._bpm.viaturas.analytics.dto.TopItemDTO;
 import pmto._bpm.viaturas.analytics.repository.AnalyticsRepository;
 import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
+import pmto._bpm.viaturas.checklists.dto.CategoriaProblema;
 import pmto._bpm.viaturas.checklists.model.CheckList;
 import pmto._bpm.viaturas.checklists.model.CheckListProblema;
 import pmto._bpm.viaturas.checklists.model.Problema;
@@ -98,8 +99,8 @@ class RepositoryQueryTest {
         User user = persistUser(batalhao, "222222", "12345678902");
         Viatura viatura = persistViatura(batalhao, "PM-02");
 
-        Problema pneu = persistProblema("Mecanico", "Pneu");
-        Problema freio = persistProblema("Mecanico", "Freio");
+        Problema pneu = persistProblema(CategoriaProblema.PNEUS, "Pneu");
+        Problema freio = persistProblema(CategoriaProblema.PNEUS, "Freio");
 
         CheckList c1 = persistChecklist(viatura, user, false);
         CheckList c2 = persistChecklist(viatura, user, false);
@@ -151,7 +152,7 @@ class RepositoryQueryTest {
         return entityManager.persistAndFlush(v);
     }
 
-    private Problema persistProblema(String categoria, String descricao) {
+    private Problema persistProblema(CategoriaProblema categoria, String descricao) {
         Problema p = new Problema();
         p.setCategoria(categoria);
         p.setDescricao(descricao);

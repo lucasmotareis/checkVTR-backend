@@ -6,6 +6,8 @@ import lombok.Setter;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="viatura")
@@ -24,7 +26,11 @@ public class Viatura {
     private int kmRevisao;
     private boolean manutencao;
 
+    @Column(name = "combustivel_atual_percentual")
+    private Integer combustivelAtualPercentual;
 
+    @OneToMany(mappedBy = "viatura")
+    private List<ViaturaPendencia> pendencias = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "batalhao_id")

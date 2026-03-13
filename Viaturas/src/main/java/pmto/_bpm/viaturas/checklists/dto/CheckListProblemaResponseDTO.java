@@ -5,12 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CheckListProblemaDTO {
-
+public class CheckListProblemaResponseDTO {
     private Long problemaId;
-    private String problemaNome;
     private String categoria;
+    private String problemaNome;
     private String observacao;
-
-
 }

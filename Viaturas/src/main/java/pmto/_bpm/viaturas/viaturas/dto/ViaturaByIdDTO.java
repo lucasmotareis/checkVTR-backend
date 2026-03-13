@@ -7,6 +7,7 @@ public record ViaturaByIdDTO(
         String modelo,
         int kmAtual,
         int kmRevisao,
+        Integer combustivelAtualPercentual,
         boolean manutencao,
         Long batalhaoId,
         String batalhaoNome

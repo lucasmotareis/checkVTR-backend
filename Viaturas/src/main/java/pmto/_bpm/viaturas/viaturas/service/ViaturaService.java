@@ -1,5 +1,4 @@
 package pmto._bpm.viaturas.viaturas.service;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaByIdDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaComBadgeDTO;
@@ -12,7 +11,6 @@ import pmto._bpm.viaturas.batalhao.repository.BatalhaoRepository;
 import pmto._bpm.viaturas.viaturas.repository.ViaturaRepository;
 import jakarta.persistence.EntityNotFoundException;
 
-import java.time.Instant;
 import java.util.List;
 
 
@@ -40,6 +38,7 @@ public class ViaturaService {
         viatura.setManutencao(dto.isManutencao());
         viatura.setKmAtual(dto.getKmAtual());
         viatura.setKmRevisao(dto.getKmRevisao());
+        viatura.setCombustivelAtualPercentual(dto.getCombustivelAtualPercentual());
         viatura.setBatalhao(batalhao);
         return viaturaRepository.save(viatura);
     }
@@ -63,6 +62,7 @@ public class ViaturaService {
         existente.setManutencao(dto.isManutencao());
         existente.setModelo(dto.getModelo());
         existente.setKmRevisao(dto.getKmRevisao());
+        existente.setCombustivelAtualPercentual(dto.getCombustivelAtualPercentual());
 
         return viaturaRepository.save(existente);
     }
@@ -106,6 +106,7 @@ public class ViaturaService {
                 v.getModelo(),
                 v.getKmAtual(),
                 v.getKmRevisao(),
+                v.getCombustivelAtualPercentual(),
                 v.isManutencao(),
                 v.getBatalhao().getId(),
                 v.getBatalhao().getNome()

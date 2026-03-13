@@ -5,6 +5,8 @@ import pmto._bpm.viaturas.checklists.dto.ProblemaDTO;
 import pmto._bpm.viaturas.checklists.model.Problema;
 import pmto._bpm.viaturas.checklists.repository.ProblemaRepository;
 
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,7 +24,7 @@ public class ProblemaController {
     private ProblemaDTO toDTO(Problema problema) {
         return new ProblemaDTO(
                 problema.getId(),
-                problema.getCategoria(),
+                problema.getCategoria().name(),
                 problema.getDescricao()
         );
     }
@@ -31,6 +33,9 @@ public class ProblemaController {
     public List<ProblemaDTO> listarTodos() {
         return problemaRepository.findAll()
                 .stream()
+                .sorted(Comparator
+                        .comparingInt(Problema::getOrdemCategoria)
+                        .thenComparing(Problema::getDescricao, String.CASE_INSENSITIVE_ORDER))
                 .map(this::toDTO)
                 .toList();
     }
@@ -38,7 +43,14 @@ public class ProblemaController {
     @GetMapping("/por-categoria")
     public Map<String, List<ProblemaDTO>> listarPorCategoria() {
         return problemaRepository.findAll().stream()
+                .sorted(Comparator
+                        .comparingInt(Problema::getOrdemCategoria)
+                        .thenComparing(Problema::getDescricao, String.CASE_INSENSITIVE_ORDER))
                 .map(this::toDTO)
-                .collect(Collectors.groupingBy(ProblemaDTO::categoria));
+                .collect(Collectors.groupingBy(
+                        ProblemaDTO::categoria,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
     }
 }

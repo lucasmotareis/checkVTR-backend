@@ -6,7 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import pmto._bpm.viaturas.checklists.dto.CheckListDTO;
-import pmto._bpm.viaturas.checklists.dto.CheckListProblemaDTO;
+import pmto._bpm.viaturas.checklists.dto.CheckListProblemaRequestDTO;
+import pmto._bpm.viaturas.checklists.dto.CheckListProblemaResponseDTO;
 import pmto._bpm.viaturas.checklists.dto.CheckListResponseDTO;
 import pmto._bpm.viaturas.checklists.model.CheckList;
 import pmto._bpm.viaturas.checklists.model.CheckListProblema;
@@ -18,12 +19,14 @@ import pmto._bpm.viaturas.feed.service.FeedService;
 import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.viaturas.model.Viatura;
 import pmto._bpm.viaturas.viaturas.repository.ViaturaRepository;
+import pmto._bpm.viaturas.viaturas.service.ViaturaPendenciaService;
 
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class CheckListService {
@@ -32,20 +35,23 @@ public class CheckListService {
     private final ViaturaRepository viaturaRepository;
     private final ProblemaRepository problemaRepository;
     private final FeedService feedService;
+    private final ViaturaPendenciaService viaturaPendenciaService;
 
     public CheckListService(FeedService feedService,
                             CheckListRepository checkListRepository,
                             ViaturaRepository viaturaRepository,
-                            ProblemaRepository problemaRepository) {
+                            ProblemaRepository problemaRepository, ViaturaPendenciaService viaturaPencenciaService) {
         this.feedService = feedService;
         this.checkListRepository = checkListRepository;
         this.viaturaRepository = viaturaRepository;
         this.problemaRepository = problemaRepository;
+        this.viaturaPendenciaService = viaturaPencenciaService;
     }
 
+    @Transactional
     public CheckList criar(CheckListDTO dto, User user) {
         Viatura viatura = viaturaRepository.findById(dto.getViaturaId())
-                .orElseThrow(() -> new RuntimeException("Viatura nao encontrada."));
+                .orElseThrow(() -> new NoSuchElementException("Viatura nao encontrada."));
 
         if (!viatura.getBatalhao().getId().equals(user.getBatalhao().getId())) {
             throw new AccessDeniedException("Voce nao pode criar checklist para viatura de outro batalhao.");
@@ -59,16 +65,27 @@ public class CheckListService {
         if (dto.getKmAtual() != null && dto.getKmAtual() > 0) {
             checkList.setKmAtual(dto.getKmAtual());
             viatura.setKmAtual(dto.getKmAtual());
-            viatura.setKmRevisao(dto.getKmRevisao());
-            viaturaRepository.save(viatura);
         }
+
+        if (dto.getKmRevisao() != null && dto.getKmRevisao() > 0) {
+            viatura.setKmRevisao(dto.getKmRevisao());
+        }
+
+        // Se você já adicionou esse campo
+        if (dto.getCombustivelAtualPercentual() != null) {
+            checkList.setCombustivelAtualPercentual(dto.getCombustivelAtualPercentual());
+            viatura.setCombustivelAtualPercentual(dto.getCombustivelAtualPercentual());
+        }
+
+        viaturaRepository.save(viatura);
+
 
         checkList.setKmRevisao(dto.getKmRevisao());
 
         List<CheckListProblema> problemas = new ArrayList<>();
-        for (CheckListProblemaDTO problemaDTO : dto.getProblemas()) {
+        for (CheckListProblemaRequestDTO problemaDTO : dto.getProblemas()) {
             Problema problema = problemaRepository.findById(problemaDTO.getProblemaId())
-                    .orElseThrow(() -> new RuntimeException("Problema nao encontrado: ID " + problemaDTO.getProblemaId()));
+                    .orElseThrow(() -> new NoSuchElementException("Problema nao encontrado: ID " + problemaDTO.getProblemaId()));
             CheckListProblema checklistProblema = new CheckListProblema();
             checklistProblema.setChecklist(checkList);
             checklistProblema.setProblema(problema);
@@ -76,6 +93,9 @@ public class CheckListService {
             problemas.add(checklistProblema);
         }
         checkList.setProblemas(problemas);
+
+        CheckList checkListSalvo = checkListRepository.save(checkList);
+        viaturaPendenciaService.registrarPendenciasCriticas(checkListSalvo);
 
         feedService.adicionarEvento(
                 user.getBatalhao().getId(),
@@ -86,7 +106,7 @@ public class CheckListService {
                 )
         );
 
-        return checkListRepository.save(checkList);
+        return checkListSalvo;
     }
 
     public CheckListResponseDTO toDTO(CheckList checkList) {
@@ -102,10 +122,10 @@ public class CheckListService {
         dto.setVistoPeloChefe(checkList.isVistoPeloChefe());
         dto.setVistoPeloChefeEm(checkList.getVistoPeloChefeEm());
 
-        List<CheckListProblemaDTO> problemasDTO = checkList.getProblemas().stream().map(p -> {
-            CheckListProblemaDTO dtoP = new CheckListProblemaDTO();
+        List<CheckListProblemaResponseDTO> problemasDTO = checkList.getProblemas().stream().map(p -> {
+            CheckListProblemaResponseDTO dtoP = new CheckListProblemaResponseDTO();
             dtoP.setProblemaId(p.getProblema().getId());
-            dtoP.setCategoria(p.getProblema().getCategoria());
+            dtoP.setCategoria(p.getProblema().getCategoria().name());
             dtoP.setProblemaNome(p.getProblema().getDescricao());
             dtoP.setObservacao(p.getObservacao());
             return dtoP;
@@ -122,7 +142,7 @@ public class CheckListService {
 
     public Page<CheckListResponseDTO> findByViaturaId(Long viaturaId, Pageable pageable, User user) {
         Viatura viatura = viaturaRepository.findById(viaturaId)
-                .orElseThrow(() -> new RuntimeException("Viatura nao encontrada."));
+                .orElseThrow(() -> new NoSuchElementException("Viatura nao encontrada."));
 
         if (!viatura.getBatalhao().getId().equals(user.getBatalhao().getId())) {
             throw new AccessDeniedException("Voce nao pode visualizar checklist de viatura de outro batalhao.");
@@ -135,7 +155,7 @@ public class CheckListService {
     @Transactional
     public void marcarVistoPeloChefe(Long checklistId) {
         CheckList c = checkListRepository.findById(checklistId)
-                .orElseThrow(() -> new RuntimeException("Checklist nao encontrado"));
+                .orElseThrow(() -> new NoSuchElementException("Checklist nao encontrado"));
 
         if (!c.isVistoPeloChefe()) {
             c.setVistoPeloChefe(true);

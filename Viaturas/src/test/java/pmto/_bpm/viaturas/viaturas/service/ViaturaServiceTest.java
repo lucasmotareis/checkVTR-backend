@@ -56,6 +56,7 @@ class ViaturaServiceTest {
         dto.setModelo("Hilux");
         dto.setKmAtual(1000);
         dto.setKmRevisao(2000);
+        dto.setCombustivelAtualPercentual(75);
         dto.setManutencao(false);
 
         when(batalhaoRepository.findById(1L)).thenReturn(Optional.of(batalhao));
@@ -71,6 +72,7 @@ class ViaturaServiceTest {
         assertEquals("ABC-1234", saved.getPlaca());
         assertEquals("PM-01", saved.getPrefixo());
         assertEquals(1L, saved.getBatalhao().getId());
+        assertEquals(75, saved.getCombustivelAtualPercentual());
         verify(viaturaRepository).save(any(Viatura.class));
     }
 
@@ -95,6 +97,7 @@ class ViaturaServiceTest {
         viatura.setModelo("Ranger");
         viatura.setKmAtual(500);
         viatura.setKmRevisao(1500);
+        viatura.setCombustivelAtualPercentual(40);
         viatura.setManutencao(true);
         viatura.setBatalhao(batalhao);
 
@@ -106,6 +109,7 @@ class ViaturaServiceTest {
         ViaturaByIdDTO dto = result.get(0);
         assertEquals(2L, dto.id());
         assertEquals("PM-20", dto.prefixo());
+        assertEquals(40, dto.combustivelAtualPercentual());
         assertEquals(5L, dto.batalhaoId());
         assertEquals("6 BPM", dto.batalhaoNome());
     }

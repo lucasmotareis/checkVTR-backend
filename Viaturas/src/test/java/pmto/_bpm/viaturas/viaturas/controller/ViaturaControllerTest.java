@@ -57,7 +57,7 @@ class ViaturaControllerTest {
     @Test
     void getViaturasShouldReturnBattalionScopedList() throws Exception {
         ViaturaByIdDTO dto = new ViaturaByIdDTO(
-                1L, "PM-01", "ABC-1234", "Hilux", 1000, 2000, false, 7L, "7 BPM"
+                1L, "PM-01", "ABC-1234", "Hilux", 1000, 2000, 80, false, 7L, "7 BPM"
         );
 
         when(viaturaService.listarViaturasDTO(7L)).thenReturn(List.of(dto));
@@ -67,6 +67,7 @@ class ViaturaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].prefixo").value("PM-01"))
+                .andExpect(jsonPath("$[0].combustivelAtualPercentual").value(80))
                 .andExpect(jsonPath("$[0].batalhaoId").value(7));
 
         verify(viaturaService).listarViaturasDTO(7L);

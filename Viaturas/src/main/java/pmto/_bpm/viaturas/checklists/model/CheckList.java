@@ -50,6 +50,9 @@ public class CheckList {
 
     private Integer kmRevisao;
 
+    @Column(name = "combustivel_atual_percentual")
+    private Integer combustivelAtualPercentual;
+
     @OneToMany(mappedBy = "checklist", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<CheckListProblema> problemas = new ArrayList<>();
