@@ -6,6 +6,6 @@ import pmto._bpm.viaturas.auth.model.CadastroAutorizado;
 
 public interface CadastroAutorizadoRepository extends JpaRepository<CadastroAutorizado, Long> {
 
-    Optional<CadastroAutorizadoRepository> findByCpfAndMatricula(String cpf, String matricula);
+    Optional<CadastroAutorizado> findByCpfAndMatricula(String cpf, String matricula);
 
 }

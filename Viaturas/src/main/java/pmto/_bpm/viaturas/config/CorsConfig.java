@@ -19,7 +19,8 @@ public class CorsConfig {
 
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://localhost:3000/login",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
                 "https://localhost:3000",
                 "https://api.pmto8bpm.com.br",
                 "http://10.0.2.2:3000",

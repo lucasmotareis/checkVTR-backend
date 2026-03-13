@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pmto._bpm.viaturas.auth.dto.AuthResponse;
 import pmto._bpm.viaturas.auth.dto.LoginRequest;
 import pmto._bpm.viaturas.auth.dto.RegisterRequest;
+import pmto._bpm.viaturas.auth.model.CadastroAutorizado;
 import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.auth.repository.CadastroAutorizadoRepository;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
@@ -56,7 +57,7 @@ class AuthServiceTest {
         Batalhao batalhao = buildBatalhao(1L, "8 BPM");
 
         when(cadastroAutorizado.findByCpfAndMatricula(dto.getCpf(), dto.getMatricula()))
-                .thenReturn(Optional.of(mock(CadastroAutorizadoRepository.class)));
+                .thenReturn(Optional.of(mock(CadastroAutorizado.class)));
         when(batalhaoRepository.findById(dto.getBatalhaoId())).thenReturn(Optional.of(batalhao));
         when(userRepository.existsByCPF(dto.getCpf())).thenReturn(false);
         when(userRepository.existsByMatricula(dto.getMatricula())).thenReturn(false);
@@ -95,7 +96,7 @@ class AuthServiceTest {
         Batalhao batalhao = buildBatalhao(1L, "8 BPM");
 
         when(cadastroAutorizado.findByCpfAndMatricula(dto.getCpf(), dto.getMatricula()))
-                .thenReturn(Optional.of(mock(CadastroAutorizadoRepository.class)));
+                .thenReturn(Optional.of(mock(CadastroAutorizado.class)));
         when(batalhaoRepository.findById(dto.getBatalhaoId())).thenReturn(Optional.of(batalhao));
         when(userRepository.existsByCPF(dto.getCpf())).thenReturn(true);
 
@@ -167,4 +168,3 @@ class AuthServiceTest {
         return user;
     }
 }
-

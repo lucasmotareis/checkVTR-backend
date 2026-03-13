@@ -31,6 +31,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -119,7 +120,7 @@ class CheckListControllerTest {
         dto.setPrefixo("PM-30");
         dto.setNomeGuerra("Silva");
 
-        when(checkListService.findByViaturaId(eq(5L), any()))
+        when(checkListService.findByViaturaId(eq(5L), any(), any(User.class)))
                 .thenReturn(new PageImpl<>(List.of(dto), PageRequest.of(0, 20), 1));
 
         mockMvc.perform(get("/checklist/viaturas/5/checklists")
@@ -129,6 +130,25 @@ class CheckListControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].id").value(30))
                 .andExpect(jsonPath("$.content[0].prefixo").value("PM-30"));
+    }
+
+    @Test
+    void postChecklistShouldReturnBadRequestWhenPayloadInvalid() throws Exception {
+        String body = objectMapper.writeValueAsString(Map.of(
+                "viaturaId", 1,
+                "problemas", List.of(),
+                "kmAtual", 0,
+                "kmRevisao", 0,
+                "imagens", List.of()
+        ));
+
+        mockMvc.perform(post("/checklist")
+                        .with(authentication(auth(Role.MOTORISTA, 1L)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest());
+
+        verify(checkListService, never()).criar(any(), any(User.class));
     }
 
     private UsernamePasswordAuthenticationToken auth(Role role, Long batalhaoId) {

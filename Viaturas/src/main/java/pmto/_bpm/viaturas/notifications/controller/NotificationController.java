@@ -104,8 +104,14 @@ class NotificationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
+    public ResponseEntity<Void> deletar(@PathVariable Long id, Authentication auth) {
         try {
+            User user = getAuthenticatedUser(auth);
+            Notification notification = notificationService.getNotificationById(id);
+            if (!notification.getBatalhao().getId().equals(user.getBatalhao().getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
             notificationService.deletar(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {

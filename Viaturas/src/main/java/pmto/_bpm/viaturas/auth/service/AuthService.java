@@ -6,6 +6,7 @@ import pmto._bpm.viaturas.auth.dto.AuthResponse;
 import pmto._bpm.viaturas.auth.dto.LoginRequest;
 import pmto._bpm.viaturas.auth.dto.RegisterRequest;
 import pmto._bpm.viaturas.auth.dto.UserResponse;
+import pmto._bpm.viaturas.auth.model.CadastroAutorizado;
 import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.auth.repository.CadastroAutorizadoRepository;
@@ -36,7 +37,7 @@ public class AuthService {
     }
 
     public String register(RegisterRequest dto) {
-        Optional<CadastroAutorizadoRepository> autorizado =
+        Optional<CadastroAutorizado> autorizado =
                 cadastroAutorizado.findByCpfAndMatricula(dto.getCpf(), dto.getMatricula());
 
         Batalhao batalhao = batalhaoRepository.findById(dto.getBatalhaoId())

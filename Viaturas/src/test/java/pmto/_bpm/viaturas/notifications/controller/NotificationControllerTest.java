@@ -31,6 +31,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -105,6 +106,22 @@ class NotificationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void postNotificationShouldReturnBadRequestWhenPayloadInvalid() throws Exception {
+        String body = objectMapper.writeValueAsString(Map.of(
+                "titulo", "",
+                "mensagem", ""
+        ));
+
+        mockMvc.perform(post("/notifications")
+                        .with(authentication(auth(Role.CHEFE_TRANSPORTE, 1L)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest());
+
+        verify(notificationService, never()).criar(any());
     }
 
     @Test
