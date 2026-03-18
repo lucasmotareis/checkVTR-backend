@@ -23,10 +23,19 @@ public class CategoriaProblemaConverter implements AttributeConverter<CategoriaP
 
         String normalized = normalize(dbData);
         return switch (normalized) {
+            case "FAROL", "FAROIS" -> CategoriaProblema.FAROL;
             case "LUZ", "LUZES" -> CategoriaProblema.LUZES;
             case "PNEU", "PNEUS" -> CategoriaProblema.PNEUS;
             case "SINALIZACAO_POLICIAL" -> CategoriaProblema.SINALIZACAO_POLICIAL;
             case "ITENS_OBRIGATORIOS" -> CategoriaProblema.ITENS_OBRIGATORIOS;
+            case "EQUIPAMENTOS_OPERACIONAIS" -> CategoriaProblema.EQUIPAMENTOS_OPERACIONAIS;
+            case "CLIMATIZACAO" -> CategoriaProblema.CLIMATIZACAO;
+            case "PAINEL_COMANDOS" -> CategoriaProblema.PAINEL_COMANDOS;
+            case "LIMPADORES_VISIBILIDADE" -> CategoriaProblema.LIMPADORES_VISIBILIDADE;
+            case "INTERIOR_CABINE" -> CategoriaProblema.INTERIOR_CABINE;
+            case "CARROCERIA_EXTERNOS" -> CategoriaProblema.CARROCERIA_EXTERNOS;
+            case "VIDROS_RETROVISORES" -> CategoriaProblema.VIDROS_RETROVISORES;
+            case "MECANICA_GERAL", "MECANICA" -> CategoriaProblema.MECANICA_GERAL;
             case "COMBUSTIVEL" -> CategoriaProblema.COMBUSTIVEL;
             case "REFRIGERACAO" -> CategoriaProblema.REFRIGERACAO;
             case "MOTOR" -> CategoriaProblema.MOTOR;

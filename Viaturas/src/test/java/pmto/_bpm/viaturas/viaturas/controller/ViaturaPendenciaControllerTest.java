@@ -8,11 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.auth.security.JwtAuthFilter;
@@ -51,10 +51,10 @@ class ViaturaPendenciaControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private ViaturaPendenciaService viaturaPendenciaService;
 
-    @MockBean
+    @MockitoBean
     private JwtAuthFilter jwtAuthFilter;
 
     @BeforeEach

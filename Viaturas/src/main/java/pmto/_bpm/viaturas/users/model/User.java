@@ -37,6 +37,12 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String matricula;
 
+    @Column(unique = true)
+    private String email;
+
+    @Column(name = "email_verified")
+    private Boolean emailVerified;
+
     @Column(name = "foto_perfil_url")
     private String fotoPerfilUrl;
 
@@ -131,6 +137,22 @@ public class User implements UserDetails {
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isEmailVerified() {
+        return Boolean.TRUE.equals(emailVerified);
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
     }
 
     public User(Batalhao batalhao, String nomeGuerra, String senha, String cpf, String matricula, Role role) {
