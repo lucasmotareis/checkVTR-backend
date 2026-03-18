@@ -1,4 +1,4 @@
 #NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Wed Mar 18 03:58:57 GMT-03:00 2026
-slf4j-api-2.0.17.jar>central=
-slf4j-api-2.0.17.pom>central=
+#Wed Mar 18 00:12:09 GMT-03:00 2026
+jakarta.mail-2.0.4.jar>central=
+jakarta.mail-2.0.4.pom>central=
