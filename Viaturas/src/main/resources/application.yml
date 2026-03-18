@@ -8,6 +8,21 @@ spring:
     init:
       encoding: UTF-8
 
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:dochecksolucoes@gmail.com}
+    password: ${MAIL_PASSWORD:htatleozwggjueey}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,6 +30,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+auth:
+  password-reset:
+    reset-url-base: ${PASSWORD_RESET_URL_BASE:https://localhost:3000/reset-password}
+    from-email: ${PASSWORD_RESET_FROM_EMAIL:no-reply@docheck.local}
+  email-verification:
+    verify-url-base: ${EMAIL_VERIFICATION_URL_BASE:https://localhost:3000/verify-email}
+    from-email: ${EMAIL_VERIFICATION_FROM_EMAIL:no-reply@docheck.local}
+
 jwt:
   secret: ${JWT_SECRET}
-

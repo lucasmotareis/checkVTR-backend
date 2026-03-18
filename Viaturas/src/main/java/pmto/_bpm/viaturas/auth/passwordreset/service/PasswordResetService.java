@@ -1,8 +1,10 @@
 package pmto._bpm.viaturas.auth.passwordreset.service;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pmto._bpm.viaturas.auth.passwordreset.event.PasswordResetEmailRequestedEvent;
 import pmto._bpm.viaturas.auth.passwordreset.dto.ForgotPasswordRequest;
 import pmto._bpm.viaturas.auth.passwordreset.dto.ResetPasswordRequest;
 import pmto._bpm.viaturas.auth.passwordreset.model.PasswordResetToken;
@@ -27,24 +29,24 @@ public class PasswordResetService {
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PasswordResetTokenDeliveryPort deliveryPort;
     private final PasswordResetTokenGenerator tokenGenerator;
     private final Clock clock;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public PasswordResetService(
             UserRepository userRepository,
             PasswordResetTokenRepository passwordResetTokenRepository,
             PasswordEncoder passwordEncoder,
-            PasswordResetTokenDeliveryPort deliveryPort,
             PasswordResetTokenGenerator tokenGenerator,
-            Clock clock
+            Clock clock,
+            ApplicationEventPublisher applicationEventPublisher
     ) {
         this.userRepository = userRepository;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.passwordEncoder = passwordEncoder;
-        this.deliveryPort = deliveryPort;
         this.tokenGenerator = tokenGenerator;
         this.clock = clock;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
@@ -61,7 +63,9 @@ public class PasswordResetService {
                     passwordResetToken.setExpiresAt(expiresAt);
 
                     passwordResetTokenRepository.save(passwordResetToken);
-                    deliveryPort.deliver(user, rawToken, expiresAt);
+                    applicationEventPublisher.publishEvent(
+                            new PasswordResetEmailRequestedEvent(user.getId(), rawToken, expiresAt)
+                    );
                 });
     }
 

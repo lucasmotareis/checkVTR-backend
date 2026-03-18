@@ -38,6 +38,8 @@ public class SecurityConfig {
                                 "/auth/me",
                                 "/auth/forgot-password",
                                 "/auth/reset-password",
+                                "/auth/verify-email",
+                                "/auth/resend-verification-email",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()

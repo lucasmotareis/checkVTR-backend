@@ -2,10 +2,13 @@ package pmto._bpm.viaturas.auth.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
 import pmto._bpm.viaturas.auth.dto.AuthResponse;
 import pmto._bpm.viaturas.auth.dto.LoginRequest;
 import pmto._bpm.viaturas.auth.dto.RegisterRequest;
 import pmto._bpm.viaturas.auth.dto.UserResponse;
+import pmto._bpm.viaturas.auth.emailverification.event.VerificationEmailRequestedEvent;
 import pmto._bpm.viaturas.auth.model.CadastroAutorizado;
 import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.users.model.User;
@@ -26,16 +29,26 @@ public class AuthService {
     private final BatalhaoRepository batalhaoRepository;
     private final CadastroAutorizadoRepository cadastroAutorizado;
     private final JwtService jwtService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
-    public AuthService(BatalhaoRepository batalhaoRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, CadastroAutorizadoRepository cadastroAutorizado, JwtService jwtService) {
+    public AuthService(
+            BatalhaoRepository batalhaoRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            CadastroAutorizadoRepository cadastroAutorizado,
+            JwtService jwtService,
+            ApplicationEventPublisher applicationEventPublisher
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.cadastroAutorizado = cadastroAutorizado;
         this.batalhaoRepository = batalhaoRepository;
         this.jwtService = jwtService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    @Transactional
     public String register(RegisterRequest dto) {
         Optional<CadastroAutorizado> autorizado =
                 cadastroAutorizado.findByCpfAndMatricula(dto.getCpf(), dto.getMatricula());
@@ -59,7 +72,15 @@ public class AuthService {
         user.setNomeGuerra( dto.getNomeGuerra() );
         user.setRole(Role.valueOf("MOTORISTA"));
         user.setBatalhao(batalhao);
+        user.setEmail(dto.getEmail());
+        user.setEmailVerified(false);
         userRepository.save(user);
+
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
+            applicationEventPublisher.publishEvent(
+                    new VerificationEmailRequestedEvent(dto.getEmail())
+            );
+        }
 
         return "Cadastro realizado com sucesso!";
 

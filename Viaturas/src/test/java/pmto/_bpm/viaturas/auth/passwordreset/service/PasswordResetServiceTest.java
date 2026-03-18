@@ -6,9 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pmto._bpm.viaturas.auth.passwordreset.dto.ForgotPasswordRequest;
 import pmto._bpm.viaturas.auth.passwordreset.dto.ResetPasswordRequest;
+import pmto._bpm.viaturas.auth.passwordreset.event.PasswordResetEmailRequestedEvent;
 import pmto._bpm.viaturas.auth.passwordreset.model.PasswordResetToken;
 import pmto._bpm.viaturas.auth.passwordreset.repository.PasswordResetTokenRepository;
 import pmto._bpm.viaturas.users.model.User;
@@ -29,9 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +54,9 @@ class PasswordResetServiceTest {
     @Mock
     private PasswordResetTokenGenerator tokenGenerator;
 
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
+
     private PasswordResetService passwordResetService;
 
     private Clock fixedClock;
@@ -63,9 +68,9 @@ class PasswordResetServiceTest {
                 userRepository,
                 passwordResetTokenRepository,
                 passwordEncoder,
-                deliveryPort,
                 tokenGenerator,
-                fixedClock
+                fixedClock,
+                applicationEventPublisher
         );
     }
 
@@ -78,7 +83,8 @@ class PasswordResetServiceTest {
         assertDoesNotThrow(() -> passwordResetService.requestForgotPassword(request));
 
         verify(passwordResetTokenRepository, never()).save(any(PasswordResetToken.class));
-        verify(deliveryPort, never()).deliver(any(User.class), any(String.class), any(Instant.class));
+        verifyNoInteractions(deliveryPort);
+        verify(applicationEventPublisher, never()).publishEvent(any(PasswordResetEmailRequestedEvent.class));
     }
 
     @Test
@@ -86,6 +92,8 @@ class PasswordResetServiceTest {
         User user = buildVerifiedUser("silva@pmto.gov.br", "old-password");
         when(userRepository.findByEmailIgnoreCase("silva@pmto.gov.br")).thenReturn(Optional.of(user));
         when(tokenGenerator.generate()).thenReturn("raw-reset-token");
+        when(passwordResetTokenRepository.save(any(PasswordResetToken.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         ForgotPasswordRequest request = new ForgotPasswordRequest();
         request.setEmail("silva@pmto.gov.br");
@@ -101,7 +109,24 @@ class PasswordResetServiceTest {
         assertNotEquals("raw-reset-token", savedToken.getTokenHash());
         assertEquals(Instant.parse("2026-03-17T12:15:00Z"), savedToken.getExpiresAt());
 
-        verify(deliveryPort).deliver(eq(user), eq("raw-reset-token"), eq(Instant.parse("2026-03-17T12:15:00Z")));
+        verifyNoInteractions(deliveryPort);
+        verify(applicationEventPublisher).publishEvent(any(PasswordResetEmailRequestedEvent.class));
+    }
+
+    @Test
+    void forgotPasswordShouldNotDependOnSynchronousEmailSend() {
+        User user = buildVerifiedUser("silva@pmto.gov.br", "old-password");
+        when(userRepository.findByEmailIgnoreCase("silva@pmto.gov.br")).thenReturn(Optional.of(user));
+        when(tokenGenerator.generate()).thenReturn("raw-reset-token");
+        when(passwordResetTokenRepository.save(any(PasswordResetToken.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        ForgotPasswordRequest request = new ForgotPasswordRequest();
+        request.setEmail("silva@pmto.gov.br");
+
+        assertDoesNotThrow(() -> passwordResetService.requestForgotPassword(request));
+        verifyNoInteractions(deliveryPort);
+        verify(applicationEventPublisher).publishEvent(any(PasswordResetEmailRequestedEvent.class));
     }
 
     @Test

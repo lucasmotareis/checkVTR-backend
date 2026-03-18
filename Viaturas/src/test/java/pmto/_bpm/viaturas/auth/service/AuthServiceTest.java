@@ -6,10 +6,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pmto._bpm.viaturas.auth.dto.AuthResponse;
 import pmto._bpm.viaturas.auth.dto.LoginRequest;
 import pmto._bpm.viaturas.auth.dto.RegisterRequest;
+import pmto._bpm.viaturas.auth.emailverification.event.VerificationEmailRequestedEvent;
 import pmto._bpm.viaturas.auth.model.CadastroAutorizado;
 import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.auth.repository.CadastroAutorizadoRepository;
@@ -19,9 +21,11 @@ import pmto._bpm.viaturas.common.exception.RegisterException;
 import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.users.repository.UserRepository;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,6 +52,9 @@ class AuthServiceTest {
     @Mock
     private JwtService jwtService;
 
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @InjectMocks
     private AuthService authService;
 
@@ -72,7 +79,12 @@ class AuthServiceTest {
         assertEquals("encoded-password", saved.getSenha());
         assertEquals(Role.MOTORISTA, saved.getRole());
         assertEquals("123456", saved.getMatricula());
+        assertEquals("silva@pmto.gov.br", saved.getEmail());
+        assertFalse(saved.isEmailVerified());
+        assertEquals(Boolean.FALSE, readEmailVerifiedRaw(saved));
         assertEquals("Cadastro realizado com sucesso!", result);
+
+        verify(applicationEventPublisher).publishEvent(any(VerificationEmailRequestedEvent.class));
     }
 
     @Test
@@ -88,6 +100,7 @@ class AuthServiceTest {
 
         assertNotNull(ex.getMessage());
         verify(userRepository, never()).save(any(User.class));
+        verify(applicationEventPublisher, never()).publishEvent(any(VerificationEmailRequestedEvent.class));
     }
 
     @Test
@@ -104,6 +117,7 @@ class AuthServiceTest {
 
         assertNotNull(ex.getMessage());
         verify(userRepository, never()).save(any(User.class));
+        verify(applicationEventPublisher, never()).publishEvent(any(VerificationEmailRequestedEvent.class));
     }
 
     @Test
@@ -150,6 +164,7 @@ class AuthServiceTest {
         dto.setSenha("abc123");
         dto.setCpf("12345678900");
         dto.setMatricula("123456");
+        dto.setEmail("silva@pmto.gov.br");
         dto.setBatalhaoId(1L);
         return dto;
     }
@@ -166,5 +181,15 @@ class AuthServiceTest {
         user.setMatricula(matricula);
         user.setSenha(senha);
         return user;
+    }
+
+    private Boolean readEmailVerifiedRaw(User user) {
+        try {
+            Field field = User.class.getDeclaredField("emailVerified");
+            field.setAccessible(true);
+            return (Boolean) field.get(user);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Could not inspect emailVerified field", e);
+        }
     }
 }

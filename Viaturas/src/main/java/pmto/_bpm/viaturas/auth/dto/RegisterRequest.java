@@ -2,6 +2,7 @@ package pmto._bpm.viaturas.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
 
 
 public class RegisterRequest {
@@ -21,6 +22,8 @@ public class RegisterRequest {
     @NotBlank
     private String matricula;
 
+    @Email
+    private String email;
 
     @NotNull
     private Long batalhaoId;
@@ -71,5 +74,13 @@ public class RegisterRequest {
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
