@@ -1,7 +1,6 @@
 version: "3.8"
 
 services:
-
   app:
     container_name: frotapm-backend
     build:
@@ -24,20 +23,17 @@ services:
       - "traefik.http.routers.frotapm.tls.certresolver=letsencrypt"
       - "traefik.http.services.frotapm.loadbalancer.server.port=8080"
       - "traefik.http.routers.frotapm.middlewares=cors"
-
       - "traefik.http.middlewares.frotapm-cors.headers.accessControlAllowOriginList=https://localhost:5173,https://pmto8bpm.com.br,https://frota.pmto8bpm.com.br,https://api.pmto8bpm.com.br,https://localhost:3000/login, https://localhost:3000, https://web.pmto8bpm.com.br, https://api.pmto8bpm.com.br"
       - "traefik.http.middlewares.frotapm-cors.headers.accessControlAllowMethods=GET,POST,OPTIONS,PUT,DELETE"
       - "traefik.http.middlewares.frotapm-cors.headers.accessControlAllowHeaders=Authorization,Content-Type,X-Client-Type"
       - "traefik.http.middlewares.frotapm-cors.headers.accessControlAllowCredentials=true"
-
-
 
   db:
     container_name: frotapm-postgres
     image: postgres:15
     restart: always
     expose:
-      - "5432:5432"
+      - "5432"
     environment:
       POSTGRES_DB: frotapm
       POSTGRES_USER: frotapm
@@ -45,5 +41,24 @@ services:
     volumes:
       - pgdata_reset_20260317:/var/lib/postgresql/data
 
+  pgadmin:
+    image: "dpage/pgadmin4:latest"
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.pmto8bpm.com.br`)"
+      - "traefik.http.routers.pgadmin.entrypoints=websecure"
+      - "traefik.http.routers.pgadmin.tls=true"
+      - "traefik.http.routers.pgadmin.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
+
 volumes:
   pgdata_reset_20260317:
+  pgadmin_data:
