@@ -19,8 +19,6 @@ public class ViaturaDTO {
 
     private boolean manutencao;
 
-    private Long batalhaoId;
-
     @NotBlank(message = "O prefixo e obrigatorio.")
     private String prefixo;
 

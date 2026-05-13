@@ -1,22 +1,19 @@
 package pmto._bpm.viaturas.viaturas.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.security.access.AccessDeniedException;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
-import pmto._bpm.viaturas.batalhao.repository.BatalhaoRepository;
+import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaByIdDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaDTO;
 import pmto._bpm.viaturas.viaturas.model.Viatura;
 import pmto._bpm.viaturas.viaturas.repository.ViaturaRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,25 +29,19 @@ class ViaturaServiceTest {
     @Mock
     private ViaturaRepository viaturaRepository;
 
-    @Mock
-    private BatalhaoRepository batalhaoRepository;
-
     @InjectMocks
     private ViaturaService viaturaService;
 
-    @BeforeEach
-    void setUp() {
-        ReflectionTestUtils.setField(viaturaService, "batalhaoRepository", batalhaoRepository);
-    }
-
     @Test
-    void saveShouldPersistViaturaWhenBatalhaoExists() {
+    void saveShouldPersistViaturaWhenAuthenticatedUserHasBatalhao() {
         Batalhao batalhao = new Batalhao();
         batalhao.setId(1L);
         batalhao.setNome("8 BPM");
 
+        User user = new User();
+        user.setBatalhao(batalhao);
+
         ViaturaDTO dto = new ViaturaDTO();
-        dto.setBatalhaoId(1L);
         dto.setPlaca("ABC-1234");
         dto.setPrefixo("PM-01");
         dto.setModelo("Hilux");
@@ -59,14 +50,13 @@ class ViaturaServiceTest {
         dto.setCombustivelAtualPercentual(75);
         dto.setManutencao(false);
 
-        when(batalhaoRepository.findById(1L)).thenReturn(Optional.of(batalhao));
         when(viaturaRepository.save(any(Viatura.class))).thenAnswer(invocation -> {
             Viatura v = invocation.getArgument(0);
             v.setId(10L);
             return v;
         });
 
-        Viatura saved = viaturaService.save(dto);
+        Viatura saved = viaturaService.save(dto, user);
 
         assertNotNull(saved.getId());
         assertEquals("ABC-1234", saved.getPlaca());
@@ -74,6 +64,20 @@ class ViaturaServiceTest {
         assertEquals(1L, saved.getBatalhao().getId());
         assertEquals(75, saved.getCombustivelAtualPercentual());
         verify(viaturaRepository).save(any(Viatura.class));
+    }
+
+    @Test
+    void saveShouldDenyWhenAuthenticatedUserHasNoBatalhao() {
+        User user = new User();
+        ViaturaDTO dto = new ViaturaDTO();
+        dto.setPlaca("ABC-1234");
+        dto.setPrefixo("PM-01");
+        dto.setModelo("Hilux");
+        dto.setKmAtual(1000);
+        dto.setKmRevisao(2000);
+
+        assertThrows(AccessDeniedException.class, () -> viaturaService.save(dto, user));
+        verify(viaturaRepository, never()).save(any(Viatura.class));
     }
 
     @Test

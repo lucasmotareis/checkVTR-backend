@@ -1,35 +1,31 @@
 package pmto._bpm.viaturas.viaturas.service;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Service;
+import pmto._bpm.viaturas.batalhao.model.Batalhao;
+import pmto._bpm.viaturas.users.model.User;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaByIdDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaComBadgeDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaDTO;
-
-import org.springframework.stereotype.Service;
-import pmto._bpm.viaturas.batalhao.model.Batalhao;
 import pmto._bpm.viaturas.viaturas.model.Viatura;
-import pmto._bpm.viaturas.batalhao.repository.BatalhaoRepository;
 import pmto._bpm.viaturas.viaturas.repository.ViaturaRepository;
-import jakarta.persistence.EntityNotFoundException;
-
-import java.util.List;
-
 
 @Service
 public class ViaturaService {
-    @Autowired
-    private BatalhaoRepository batalhaoRepository;
-
     public final ViaturaRepository viaturaRepository;
 
     public ViaturaService(ViaturaRepository viaturaRepository) {
         this.viaturaRepository = viaturaRepository;
     }
 
+    public Viatura save(ViaturaDTO dto, User user) {
+        if (user == null || user.getBatalhao() == null || user.getBatalhao().getId() == null) {
+            throw new AccessDeniedException("Usuario sem batalhao associado.");
+        }
 
-    public Viatura save(ViaturaDTO dto) {
-
-        Batalhao batalhao = batalhaoRepository.findById(dto.getBatalhaoId())
-                .orElseThrow(() -> new IllegalArgumentException("Batalhão não encontrado"));
+        Batalhao batalhao = user.getBatalhao();
 
         Viatura viatura = new Viatura();
         viatura.setPlaca(dto.getPlaca());
@@ -43,14 +39,12 @@ public class ViaturaService {
         return viaturaRepository.save(viatura);
     }
 
-
     public void delete(Long id) {
         if (!viaturaRepository.existsById(id)) {
             throw new EntityNotFoundException("Viatura não encontrada com ID " + id);
         }
         viaturaRepository.deleteById(id);
     }
-
 
     public Viatura atualizar(Long id, ViaturaDTO dto) {
         Viatura existente = viaturaRepository.findById(id)
@@ -78,7 +72,6 @@ public class ViaturaService {
                 .toList();
     }
 
-
     public List<ViaturaComBadgeDTO> listarComBadges(Long batalhaoId) {
         return viaturaRepository.findViaturasComBadge(batalhaoId);
     }
@@ -88,7 +81,7 @@ public class ViaturaService {
     }
 
     public Viatura getViaturaById(Long id) {
-       return viaturaRepository.getById(id);
+        return viaturaRepository.getById(id);
     }
 
     public ViaturaByIdDTO getViaturaById2(Long id) {
@@ -112,5 +105,4 @@ public class ViaturaService {
                 v.getBatalhao().getNome()
         );
     }
-
 }
