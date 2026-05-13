@@ -1,7 +1,8 @@
 # Etapa 1: Build do projeto
 FROM maven:3.9.6-eclipse-temurin-21 AS builder
 WORKDIR /app
-COPY . .
+COPY pom.xml ./
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa 2: Imagem final (mais leve)
