@@ -51,7 +51,7 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-      - SERVICE_URL_PGADMIN_80
+      - SERVICE_URL_PGADMIN
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     labels:
