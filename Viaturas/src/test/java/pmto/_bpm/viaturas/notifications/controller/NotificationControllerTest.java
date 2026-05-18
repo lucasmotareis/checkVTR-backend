@@ -19,6 +19,8 @@ import pmto._bpm.viaturas.auth.model.Role;
 import pmto._bpm.viaturas.auth.security.JwtAuthFilter;
 import pmto._bpm.viaturas.batalhao.model.Batalhao;
 import pmto._bpm.viaturas.notifications.dto.NotificacaoItemDTO;
+import pmto._bpm.viaturas.notifications.dto.NotificationResponseDTO;
+import pmto._bpm.viaturas.notifications.model.Notification;
 import pmto._bpm.viaturas.notifications.service.NotificationService;
 import pmto._bpm.viaturas.testsupport.TestSecurityConfig;
 import pmto._bpm.viaturas.users.model.User;
@@ -113,6 +115,51 @@ class NotificationControllerTest {
         String body = objectMapper.writeValueAsString(Map.of(
                 "titulo", "",
                 "mensagem", ""
+        ));
+
+        mockMvc.perform(post("/notifications")
+                        .with(authentication(auth(Role.CHEFE_TRANSPORTE, 1L)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest());
+
+        verify(notificationService, never()).criar(any());
+    }
+
+    @Test
+    void postNotificationShouldAcceptPayloadAtNewCharacterLimits() throws Exception {
+        String titulo = "T".repeat(80);
+        String mensagem = "M".repeat(500);
+
+        Notification notification = new Notification();
+        notification.setId(1L);
+        notification.setTitulo(titulo);
+        notification.setMensagem(mensagem);
+
+        when(notificationService.criar(any())).thenReturn(notification);
+        when(notificationService.toResponseDTO(any(Notification.class))).thenReturn(
+                new NotificationResponseDTO(1L, titulo, mensagem, OffsetDateTime.now(), 1L, "8 BPM")
+        );
+
+        String body = objectMapper.writeValueAsString(Map.of(
+                "titulo", titulo,
+                "mensagem", mensagem
+        ));
+
+        mockMvc.perform(post("/notifications")
+                        .with(authentication(auth(Role.CHEFE_TRANSPORTE, 1L)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.titulo").value(titulo))
+                .andExpect(jsonPath("$.mensagem").value(mensagem));
+    }
+
+    @Test
+    void postNotificationShouldReturnBadRequestWhenPayloadExceedsNewCharacterLimits() throws Exception {
+        String body = objectMapper.writeValueAsString(Map.of(
+                "titulo", "T".repeat(81),
+                "mensagem", "M".repeat(501)
         ));
 
         mockMvc.perform(post("/notifications")
