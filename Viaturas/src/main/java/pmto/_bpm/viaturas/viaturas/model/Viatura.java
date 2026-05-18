@@ -36,6 +36,14 @@ public class Viatura {
     @JoinColumn(name = "batalhao_id")
     private Batalhao batalhao;
 
+    @ManyToOne
+    @JoinColumn(name = "zona_id")
+    private ZonaViatura zona;
+
+    @ManyToOne
+    @JoinColumn(name = "zona_cidade_id")
+    private ZonaViaturaCidade zonaCidade;
+
 
 
     public Viatura() {

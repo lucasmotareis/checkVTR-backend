@@ -8,12 +8,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pmto._bpm.viaturas.users.model.User;
+import pmto._bpm.viaturas.viaturas.dto.AtualizarZonaViaturaDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaByIdDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaComBadgeDTO;
 import pmto._bpm.viaturas.viaturas.dto.ViaturaDTO;
@@ -85,6 +87,17 @@ public class ViaturaController {
         }
 
         viaturaService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("viatura/{id}/zona")
+    @PreAuthorize("hasRole('CHEFE_TRANSPORTE')")
+    public ResponseEntity<Void> atualizarZonaViatura(
+            @PathVariable Long id,
+            @RequestBody @Valid AtualizarZonaViaturaDTO dto,
+            Authentication auth
+    ) {
+        viaturaService.atualizarZona(id, dto, getAuthenticatedUser(auth));
         return ResponseEntity.noContent().build();
     }
 }
