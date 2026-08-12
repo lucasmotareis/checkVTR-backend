@@ -10,5 +10,6 @@ public class ChecklistUploadMetadata {
     private String prefixo;
     private String placa;
     private String matricula;
+    private String clientSubmissionId;
 
 }

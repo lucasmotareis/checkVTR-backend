@@ -35,4 +35,6 @@ public class CheckListDTO {
 
     private List<String> imagens = new ArrayList<>();
 
+    private String clientSubmissionId;
+
 }

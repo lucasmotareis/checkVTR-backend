@@ -1,6 +1,8 @@
 package pmto._bpm.viaturas.checklists.service;
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -31,6 +33,8 @@ import java.util.NoSuchElementException;
 @Service
 public class CheckListService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckListService.class);
+
     private final CheckListRepository checkListRepository;
     private final ViaturaRepository viaturaRepository;
     private final ProblemaRepository problemaRepository;
@@ -50,10 +54,39 @@ public class CheckListService {
 
     @Transactional
     public CheckList criar(CheckListDTO dto, User user) {
+        long startedAt = System.currentTimeMillis();
+        String clientSubmissionId = dto.getClientSubmissionId();
+
+        LOGGER.info(
+                "checklist_create_started clientSubmissionId={} userId={} userBatalhaoId={} viaturaId={} imagensCount={} problemasCount={}",
+                clientSubmissionId,
+                user.getId(),
+                user.getBatalhao() == null ? null : user.getBatalhao().getId(),
+                dto.getViaturaId(),
+                sizeOf(dto.getImagens()),
+                sizeOf(dto.getProblemas())
+        );
+
         Viatura viatura = viaturaRepository.findById(dto.getViaturaId())
                 .orElseThrow(() -> new NoSuchElementException("Viatura nao encontrada."));
 
+        LOGGER.info(
+                "checklist_vehicle_loaded clientSubmissionId={} viaturaId={} viaturaBatalhaoId={} prefixo={} placa={}",
+                clientSubmissionId,
+                viatura.getId(),
+                viatura.getBatalhao() == null ? null : viatura.getBatalhao().getId(),
+                viatura.getPrefixo(),
+                viatura.getPlaca()
+        );
+
         if (!viatura.getBatalhao().getId().equals(user.getBatalhao().getId())) {
+            LOGGER.warn(
+                    "checklist_batalhao_denied clientSubmissionId={} userBatalhaoId={} viaturaBatalhaoId={} viaturaId={}",
+                    clientSubmissionId,
+                    user.getBatalhao() == null ? null : user.getBatalhao().getId(),
+                    viatura.getBatalhao() == null ? null : viatura.getBatalhao().getId(),
+                    viatura.getId()
+            );
             throw new AccessDeniedException("Voce nao pode criar checklist para viatura de outro batalhao.");
         }
 
@@ -95,7 +128,20 @@ public class CheckListService {
         checkList.setProblemas(problemas);
 
         CheckList checkListSalvo = checkListRepository.save(checkList);
+        LOGGER.info(
+                "checklist_persisted clientSubmissionId={} checklistId={} imagensCount={} problemasCount={}",
+                clientSubmissionId,
+                checkListSalvo.getId(),
+                sizeOf(checkListSalvo.getImagens()),
+                sizeOf(checkListSalvo.getProblemas())
+        );
+
         viaturaPendenciaService.registrarPendenciasCriticas(checkListSalvo);
+        LOGGER.info(
+                "checklist_pending_issues_registered clientSubmissionId={} checklistId={}",
+                clientSubmissionId,
+                checkListSalvo.getId()
+        );
 
         feedService.adicionarEvento(
                 user.getBatalhao().getId(),
@@ -103,10 +149,27 @@ public class CheckListService {
                         "Check-List",
                         user.getNomeGuerra() + " finalizou checklist da VTR " + viatura.getPrefixo() + " as " +
                                 LocalTime.now(ZoneId.of("America/Sao_Paulo")).withSecond(0).withNano(0)
-                )
+                        )
+        );
+        LOGGER.info(
+                "checklist_feed_event_added clientSubmissionId={} checklistId={} batalhaoId={}",
+                clientSubmissionId,
+                checkListSalvo.getId(),
+                user.getBatalhao().getId()
+        );
+
+        LOGGER.info(
+                "checklist_create_completed clientSubmissionId={} checklistId={} durationMs={}",
+                clientSubmissionId,
+                checkListSalvo.getId(),
+                System.currentTimeMillis() - startedAt
         );
 
         return checkListSalvo;
+    }
+
+    private int sizeOf(List<?> list) {
+        return list == null ? 0 : list.size();
     }
 
     public CheckListResponseDTO toDTO(CheckList checkList) {
