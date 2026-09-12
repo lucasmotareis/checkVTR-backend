@@ -7,36 +7,40 @@ services:
     expose:
       - "8080"
     environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-frotapm}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-frotapm}
+      SPRING_PROFILES_ACTIVE: docker,homolog
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-frotapm_homolog}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-frotapm_homolog}
+      POSTGRES_USER: ${POSTGRES_USER:-frotapm_homolog}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
-      PASSWORD_RESET_URL_BASE: ${PASSWORD_RESET_URL_BASE:-https://localhost:3000/reset-password}
+      PASSWORD_RESET_URL_BASE: ${PASSWORD_RESET_URL_BASE:-https://homolog_front.pmto8bpm.com.br/reset-password}
       PASSWORD_RESET_FROM_EMAIL: ${PASSWORD_RESET_FROM_EMAIL:-no-reply@docheck.local}
-      EMAIL_VERIFICATION_URL_BASE: ${EMAIL_VERIFICATION_URL_BASE:-https://localhost:3000/verify-email}
+      EMAIL_VERIFICATION_URL_BASE: ${EMAIL_VERIFICATION_URL_BASE:-https://homolog_front.pmto8bpm.com.br/verify-email}
       EMAIL_VERIFICATION_FROM_EMAIL: ${EMAIL_VERIFICATION_FROM_EMAIL:-no-reply@docheck.local}
-      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
-      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_HOST: ${MAIL_HOST:-localhost}
+      MAIL_PORT: ${MAIL_PORT:-1025}
       MAIL_USERNAME: ${MAIL_USERNAME:-}
       MAIL_PASSWORD: ${MAIL_PASSWORD:-}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
       AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
+      S3_REGION: ${S3_REGION:-sa-east-1}
+      S3_CHECKLIST_BUCKET: ${S3_CHECKLIST_BUCKET:-homolog-fotos-viaturas}
+      S3_PROFILE_BUCKET: ${S3_PROFILE_BUCKET:-homolog-fotos-viaturas}
+      S3_KEY_PREFIX: ${S3_KEY_PREFIX:-homolog}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-https://homolog_app.pmto8bpm.com.br,https://homolog_front.pmto8bpm.com.br,https://homolog_back.pmto8bpm.com.br}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     labels:
       - "traefik.enable=${TRAEFIK_ENABLE:-true}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api}.rule=Host(`${API_HOST:-api.pmto8bpm.com.br}`)"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api}.tls=${TRAEFIK_TLS:-true}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
-      - "traefik.http.services.${TRAEFIK_SERVICE_NAME:-frotapm-api}.loadbalancer.server.port=8080"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api}.middlewares=${TRAEFIK_CORS_MIDDLEWARE:-frotapm-api-cors}"
-      - "traefik.http.middlewares.${TRAEFIK_CORS_MIDDLEWARE:-frotapm-api-cors}.headers.accessControlAllowOriginList=${CORS_ALLOWED_ORIGINS:-https://localhost:5173,https://pmto8bpm.com.br,https://frota.pmto8bpm.com.br,https://api.pmto8bpm.com.br,https://localhost:3000,https://web.pmto8bpm.com.br}"
-      - "traefik.http.middlewares.${TRAEFIK_CORS_MIDDLEWARE:-frotapm-api-cors}.headers.accessControlAllowMethods=${CORS_ALLOWED_METHODS:-GET,POST,OPTIONS,PUT,DELETE}"
-      - "traefik.http.middlewares.${TRAEFIK_CORS_MIDDLEWARE:-frotapm-api-cors}.headers.accessControlAllowHeaders=${CORS_ALLOWED_HEADERS:-Authorization,Content-Type,X-Client-Type}"
-      - "traefik.http.middlewares.${TRAEFIK_CORS_MIDDLEWARE:-frotapm-api-cors}.headers.accessControlAllowCredentials=${CORS_ALLOW_CREDENTIALS:-true}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.rule=Host(`${API_HOST:-homolog_back.pmto8bpm.com.br}`)"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.tls=${TRAEFIK_TLS:-true}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
+      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.service=${TRAEFIK_SERVICE_NAME:-frotapm-api-homolog}"
+      - "traefik.http.services.${TRAEFIK_SERVICE_NAME:-frotapm-api-homolog}.loadbalancer.server.port=8080"
 
   db:
     image: postgres:15
@@ -44,11 +48,16 @@ services:
     expose:
       - "5432"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-frotapm}
-      POSTGRES_USER: ${POSTGRES_USER:-frotapm}
+      POSTGRES_DB: ${POSTGRES_DB:-frotapm_homolog}
+      POSTGRES_USER: ${POSTGRES_USER:-frotapm_homolog}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-homolog-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 volumes:
-  postgres-data:
+  postgres-homolog-data:

@@ -1,12 +1,9 @@
 package pmto._bpm.viaturas.storage.s3;
 
 import org.springframework.stereotype.Service;
-import pmto._bpm.viaturas.users.repository.UserRepository;
 import pmto._bpm.viaturas.checklists.dto.ChecklistUploadMetadata;
 import pmto._bpm.viaturas.checklists.dto.ChecklistUploadRequestDTO;
 import pmto._bpm.viaturas.storage.dto.PresignedUpload;
-import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
@@ -23,16 +20,11 @@ import java.util.UUID;
 public class AwsS3Service {
 
     private final S3Presigner presigner;
-    private final Region region = Region.of("sa-east-1");
-    private final UserRepository userRepository;
+    private final S3StorageProperties storageProperties;
 
-    public AwsS3Service(UserRepository userRepository) {
-        this.presigner = S3Presigner.builder()
-                .region(region)
-                .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
-                .build();
-        this.userRepository = userRepository;
-
+    public AwsS3Service(S3StorageProperties storageProperties, S3Presigner presigner) {
+        this.storageProperties = storageProperties;
+        this.presigner = presigner;
     }
 
     public List<String> generatePresignedUrls(ChecklistUploadRequestDTO request) {
@@ -54,8 +46,8 @@ public class AwsS3Service {
                     fileName);
 
             PutObjectRequest objectRequest = PutObjectRequest.builder()
-                    .bucket("fotos-viaturas")
-                    .key(key)
+                    .bucket(storageProperties.getChecklistBucket())
+                    .key(storageProperties.prefixedKey(key))
                     .contentType("image/jpeg")
                     .build();
 
@@ -74,14 +66,14 @@ public class AwsS3Service {
 
      public PresignedUpload gerarUploadFotoPerfil(Long userId) {
 
-        String key = String.format(
+        String key = storageProperties.prefixedKey(String.format(
                 "usuarios/%d/perfil/%s",
                 userId,
                 UUID.randomUUID()
-        );
+        ));
 
         PutObjectRequest objectRequest = PutObjectRequest.builder()
-                .bucket("usuarios-perfil")
+                .bucket(storageProperties.getProfileBucket())
                 .key(key)
                 .contentType("image/jpeg")
                 .build();

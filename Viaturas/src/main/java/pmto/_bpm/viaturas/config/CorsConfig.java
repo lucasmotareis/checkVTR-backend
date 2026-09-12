@@ -1,32 +1,29 @@
 package pmto._bpm.viaturas.config;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
 @Configuration
 public class CorsConfig {
 
+    private final List<String> allowedOrigins;
+
+    public CorsConfig(@Value("${app.cors.allowed-origins}") List<String> allowedOrigins) {
+        this.allowedOrigins = allowedOrigins;
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
 
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://localhost:3000",
-                "http://127.0.0.1:3000",
-                "https://localhost:3000",
-                "https://api.pmto8bpm.com.br",
-                "http://10.0.2.2:3000",
-                "http://localhost:8081",
-                "http://192.168.10.101:8081",
-                "https://frota.pmto8bpm.com.br",
-                "https://web.pmto8bpm.com.br"));
+        config.setAllowedOrigins(allowedOrigins);
+        config.validateAllowCredentials();
 
         config.setAllowedHeaders(List.of("*"));
 

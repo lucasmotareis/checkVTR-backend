@@ -1,0 +1,12 @@
+[
+  {
+    "AllowedOrigins": [
+      "https://homolog_app.pmto8bpm.com.br",
+      "https://homolog_front.pmto8bpm.com.br"
+    ],
+    "AllowedMethods": ["PUT", "GET", "HEAD"],
+    "AllowedHeaders": ["*"],
+    "ExposeHeaders": ["ETag"],
+    "MaxAgeSeconds": 3000
+  }
+]
