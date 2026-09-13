@@ -9,7 +9,7 @@ O bucket informado pelo usuário é `homolog-fotos-viaturas`, em `sa-east-1` (S�
 - Branch: `homolog`, depois de publicar a branch.
 - Build Pack **Docker Compose**. Base Directory: `/Viaturas`;
   Compose: `/docker-compose.yml` relativo a essa base. O build usa `/Viaturas/Dockerfile`.
-- Domínio: `https://homolog_back.pmto8bpm.com.br`, serviço `app`, porta **8080**.
+- Domínio: `https://back_homolog.pmto8bpm.com.br`, serviço `app`, porta **8080**.
 - Copiar os valores de `.env.homolog.example` para as variáveis da aplicação;
   **não** copiar os segredos ou configurações compartilhadas de produção.
 - Preencher `POSTGRES_PASSWORD` com uma senha nova e `JWT_SECRET` com um segredo
@@ -17,10 +17,33 @@ O bucket informado pelo usuário é `homolog-fotos-viaturas`, em `sa-east-1` (S�
 - O Compose fixa o perfil `docker,homolog`, usa `db:5432/frotapm_homolog` e usuário
   `frotapm_homolog`, sem containers globalmente nomeados.
 - O volume `postgres-homolog-data` não é externo e recebe o escopo da stack/projeto.
-  Os roteadores e serviços Traefik usam nomes exclusivos de homologação.
+  O router e o service Traefik usam o nome fixo `frotapm-api-homolog`.
+  A regra de domínio também é fixa; variáveis antigas `API_HOST`,
+  `TRAEFIK_ROUTER_NAME` e `TRAEFIK_SERVICE_NAME` não alteram essas labels.
 - CORS é tratado pelo Spring, incluindo `PATCH`, e permite somente os domínios de
   homologação configurados. Não duplicar o middleware CORS antigo do Traefik.
 - Links de confirmação de e-mail e redefinição de senha usam `homolog_front`.
+
+### Editor somente leitura e conflito com produção
+
+O Compose desta aplicação vem do Git. O editor do Coolify pode ser somente leitura;
+a correção deve ser publicada na branch `homolog` e a definição recarregada da origem.
+Conferir que o recurso usa essa branch e que seu campo Domains contém somente
+`https://back_homolog.pmto8bpm.com.br` para a API, na porta interna 8080.
+As labels efetivas da homologação não devem conter uma regra para
+`api.pmto8bpm.com.br`, nem router/service `frotapm`. Conferir também as labels
+geradas pelo Coolify a partir do campo Domains.
+
+Esta correção de roteamento não altera banco, usuário, senha ou volume. Antes de
+aplicar o Compose atualizado a uma implantação antiga, comparar seus mounts com
+os atuais: versões anteriores desta branch também mudaram o nome do volume.
+Preservar os volumes que já tenham dados.
+
+No painel, configurar a variável de build
+`API_INTERNAL_URL=https://back_homolog.pmto8bpm.com.br`; no Expo Web,
+`EXPO_PUBLIC_API_URL_WEB=https://back_homolog.pmto8bpm.com.br`. Reconstruir os clientes
+se seus bundles ainda apontarem para o endereço anterior.
+Depois do deploy, testar o login de produção com homologação novamente ativa.
 
 Se usar **Dockerfile** sem Compose, criar/configurar um PostgreSQL exclusivo e
 informar `SPRING_PROFILES_ACTIVE=homolog`, `SPRING_DATASOURCE_URL`,

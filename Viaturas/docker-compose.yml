@@ -29,18 +29,19 @@ services:
       S3_CHECKLIST_BUCKET: ${S3_CHECKLIST_BUCKET:-homolog-fotos-viaturas}
       S3_PROFILE_BUCKET: ${S3_PROFILE_BUCKET:-homolog-fotos-viaturas}
       S3_KEY_PREFIX: ${S3_KEY_PREFIX:-homolog}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-https://homolog_app.pmto8bpm.com.br,https://homolog_front.pmto8bpm.com.br,https://homolog_back.pmto8bpm.com.br}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-https://homolog_app.pmto8bpm.com.br,https://homolog_front.pmto8bpm.com.br,https://back_homolog.pmto8bpm.com.br}
     depends_on:
       db:
         condition: service_healthy
     labels:
       - "traefik.enable=${TRAEFIK_ENABLE:-true}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.rule=Host(`${API_HOST:-homolog_back.pmto8bpm.com.br}`)"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.tls=${TRAEFIK_TLS:-true}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
-      - "traefik.http.routers.${TRAEFIK_ROUTER_NAME:-frotapm-api-homolog}.service=${TRAEFIK_SERVICE_NAME:-frotapm-api-homolog}"
-      - "traefik.http.services.${TRAEFIK_SERVICE_NAME:-frotapm-api-homolog}.loadbalancer.server.port=8080"
+      # Fixos nesta branch: overrides copiados do Coolify não podem publicar produção.
+      - "traefik.http.routers.frotapm-api-homolog.rule=Host(`back_homolog.pmto8bpm.com.br`)"
+      - "traefik.http.routers.frotapm-api-homolog.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+      - "traefik.http.routers.frotapm-api-homolog.tls=${TRAEFIK_TLS:-true}"
+      - "traefik.http.routers.frotapm-api-homolog.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
+      - "traefik.http.routers.frotapm-api-homolog.service=frotapm-api-homolog"
+      - "traefik.http.services.frotapm-api-homolog.loadbalancer.server.port=8080"
 
   db:
     image: postgres:15

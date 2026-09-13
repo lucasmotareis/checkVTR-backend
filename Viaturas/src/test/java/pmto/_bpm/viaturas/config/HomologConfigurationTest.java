@@ -51,6 +51,9 @@ class HomologConfigurationTest {
                     .getCorsConfiguration(new MockHttpServletRequest("OPTIONS", "/auth/login"));
             assertThat(cors.checkOrigin("https://homolog_app.pmto8bpm.com.br"))
                     .isEqualTo("https://homolog_app.pmto8bpm.com.br");
+            assertThat(cors.checkOrigin("https://back_homolog.pmto8bpm.com.br"))
+                    .isEqualTo("https://back_homolog.pmto8bpm.com.br");
+            assertThat(cors.checkOrigin("https://api.pmto8bpm.com.br")).isNull();
             assertThat(cors.checkOrigin("https://web.pmto8bpm.com.br")).isNull();
         });
     }
