@@ -8,6 +8,8 @@ services:
       - "8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker,homolog
+      APM_ENABLED: ${APM_ENABLED:-false}
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY:-}
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-frotapm_homolog}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-frotapm_homolog}
       POSTGRES_USER: ${POSTGRES_USER:-frotapm_homolog}

@@ -5,3 +5,7 @@
 target
 HELP.md
 AI_CONTEXT.md
+.env
+.env.*
+!.env*.example
+observability/results

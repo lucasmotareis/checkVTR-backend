@@ -1,0 +1,14 @@
+{
+  "participants": [],
+  "course": "",
+  "professor": "",
+  "collection_date": null,
+  "timezone": "America/Sao_Paulo",
+  "confirmed_homolog_url": null,
+  "server": { "cpu": null, "memory_gib": null, "operating_system": null },
+  "deployment": { "commit": null, "database_isolated_confirmed": false, "volume_isolated_confirmed": false },
+  "dataset": { "synthetic_only": false, "battalions": null, "users": null, "vehicles": null, "checklists": null, "problems": null },
+  "apm": { "deployment_confirmed": false, "agent_version": "9.4.0", "app_name": "checkvtr-api-homolog", "privacy_verified": false, "observations": "", "evidence_files": [] },
+  "findings": [],
+  "limitations": ["Uma coleta curta nao caracteriza toda a capacidade do sistema.", "Uma execucao antes e depois nao isola estatisticamente o custo do agente."]
+}

@@ -1,0 +1,53 @@
+common: &defaults
+  # A chave e lida de NEW_RELIC_LICENSE_KEY apenas em runtime.
+  app_name: checkvtr-api-homolog
+  agent_enabled: false
+  log_file_name: STDOUT
+  log_level: info
+  labels: environment:homolog
+
+  attributes:
+    enabled: true
+    exclude:
+      - request.parameters.*
+      - request.headers.*
+      - request.cookies.*
+      - response.headers.*
+      - response.cookies.*
+      - request.uri
+      - http.url
+      - http.request.*
+      - http.response.*
+      - enduser.*
+      - user.*
+      - token
+      - cpf
+      - matricula
+      - senha
+      - password
+
+  application_logging:
+    enabled: false
+    forwarding:
+      enabled: false
+  browser_monitoring:
+    auto_instrument: false
+  strip_exception_messages:
+    enabled: true
+  distributed_tracing:
+    enabled: true
+  transaction_tracer:
+    enabled: true
+    record_sql: obfuscated
+    log_sql: false
+  error_collector:
+    enabled: true
+    exclude_request_uri: true
+    # Falhas de acesso esperadas sao registradas nos testes, fora da taxa de falhas APM.
+    ignore_status_codes: 401,403,404
+  ai_monitoring:
+    enabled: false
+
+homolog:
+  <<: *defaults
+  agent_enabled: true

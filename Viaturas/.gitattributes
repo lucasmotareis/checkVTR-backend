@@ -1,2 +1,4 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+# Scripts executados por /bin/sh no container e nos testes de inicializacao.
+docker/*.sh text eol=lf

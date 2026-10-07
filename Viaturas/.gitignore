@@ -5,6 +5,7 @@ target/
 .env.*
 !.env*.example
 .scannerwork/
+observability/results/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
